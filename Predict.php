@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Predict
+ *
+ * A limited PHP port of the gpredict program.  Port by Bill Shupp.
+ *
+ * @license   GPL 2
+ */
 class Predict
 {
     const de2ra    =  1.74532925E-2;   /* Degrees to Radians */
