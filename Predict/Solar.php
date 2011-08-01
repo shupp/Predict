@@ -8,6 +8,7 @@ require_once 'Predict.php';
 require_once 'Predict/Math.php';
 require_once 'Predict/Time.php';
 require_once 'Predict/Solar.php';
+require_once 'Predict/Vector.php';
 
 /*
  * Unit Solar
