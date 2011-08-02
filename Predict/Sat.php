@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Predict.php';
+require_once 'Predict/Vector.php';
 
 class Predict_Sat
 {
@@ -50,6 +51,8 @@ class Predict_Sat
         $headerParts    = explode(' ', $tle->header);
         $this->name     = $headerParts[0];
         $this->nickname = $this->name;
+        $this->pos      = new Predict_Vector();
+        $this->vel      = new Predict_Vector();
 
         $this->select_ephemeris();
     }
