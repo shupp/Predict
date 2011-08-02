@@ -2,6 +2,7 @@
 
 require_once 'Predict.php';
 require_once 'Predict/Vector.php';
+require_once 'Predict/SGSDPStatic.php';
 
 class Predict_Sat
 {
@@ -53,6 +54,7 @@ class Predict_Sat
         $this->nickname = $this->name;
         $this->pos      = new Predict_Vector();
         $this->vel      = new Predict_Vector();
+        $this->sgps     = new Predict_SGSDPStatic();
 
         $this->select_ephemeris();
     }
