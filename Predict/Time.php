@@ -4,6 +4,8 @@
  * Functions from sgp_time.c and time-tools.c ported to PHP by Bill Shupp
  */
 
+require_once 'Predict.php';
+
 /*
  * Unit SGP_Time
  *       Author:  Dr TS Kelso

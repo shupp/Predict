@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Predict.php';
+
 class Predict_Sat
 {
     public $name     = null;
