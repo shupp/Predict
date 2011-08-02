@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Predict_Vector - General three-dimensional vector structure.
+ * Ported from sgp4sdp4.h.
+ */
 class Predict_Vector
 {
     public $x = 0;
