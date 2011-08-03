@@ -5,6 +5,7 @@
  */
 
 require_once 'Predict.php';
+require_once 'Predict/Math.php';
 
 /*
  * Unit SGP_Time
@@ -83,7 +84,7 @@ class Predict_Time
     /* 1999, as described above. The function ThetaG_JD provides the   */
     /* same calculation except that it is based on an input in the     */
     /* form of a Julian Date. */
-    public static function ThetaG($epoch, &$deep_arg_ds50)
+    public static function ThetaG($epoch, Predict_DeepArg $deep_arg)
     {
         /* Reference:  The 1992 Astronomical Almanac, page B6. */
         // double year,day,UT,jd,TU,GMST,_ThetaG;
@@ -105,9 +106,9 @@ class Predict_Time
         $TU = ($jd - 2451545.0) / 36525;
         $GMST = 24110.54841 + TU * (8640184.812866 + $TU * (0.093104 - $TU * 6.2E-6));
         $GMST = Predict_Math::Modulus($GMST + Predict::secday * Predict::omega_E * $UT, Predict::secday);
-        $deep_arg_ds50 = $jd - 2433281.5 + $UT;
+        $deep_arg->ds50 = $jd - 2433281.5 + $UT;
 
-        return Predict_Math::FMod2p(6.3003880987 * $deep_arg_ds50 + 1.72944494);
+        return Predict_Math::FMod2p(6.3003880987 * $deep_arg->ds50 + 1.72944494);
     }
 
     public static function ThetaG_JD($jd)
