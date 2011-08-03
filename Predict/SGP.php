@@ -56,7 +56,7 @@ class Predict_SGP
     public function SGP4(Predict_Sat $sat, $tsince)
     {
         /* Initialization */
-        if ($sat->flags & self::SGP4_INITIALIZED_FLAG) {
+        if (~$sat->flags & self::SGP4_INITIALIZED_FLAG) {
             $sat->flags |= self::SGP4_INITIALIZED_FLAG;
 
             /* Recover original mean motion (xnodp) and   */
