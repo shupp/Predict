@@ -1,7 +1,7 @@
 <?php
 
 require_once 'Predict.php';
-require_once 'Predict/SGP.php';
+require_once 'Predict/SGPSDP.php';
 require_once 'Predict/Vector.php';
 require_once 'Predict/SGSDPStatic.php';
 require_once 'Predict/DeepArg.php';
@@ -100,9 +100,9 @@ class Predict_Sat
 
         /* Select a deep-space/near-earth ephemeris */
         if (Predict::twopi / $xnodp / Predict::xmnpda >= .15625) {
-            $this->flags |= Predict_SGP::DEEP_SPACE_EPHEM_FLAG;
+            $this->flags |= Predict_SGPSDP::DEEP_SPACE_EPHEM_FLAG;
         } else {
-            $this->flags &= ~Predict_SGP::DEEP_SPACE_EPHEM_FLAG;
+            $this->flags &= ~Predict_SGPSDP::DEEP_SPACE_EPHEM_FLAG;
         }
     }
 }

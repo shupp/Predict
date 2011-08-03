@@ -21,7 +21,7 @@ require_once 'Predict/Math.php';
  *   Ported to C by:  Neoklis Kyriazis  April 10  2001
  *   Reentrancy mods by Alexandru Csete OZ9AEC
  */
-class Predict_SGP
+class Predict_SGPSDP
 {
     const ALL_FLAGS             = -1;
     const SGP_INITIALIZED_FLAG  = 0x000001;
