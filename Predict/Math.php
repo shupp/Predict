@@ -89,7 +89,7 @@ class Predict_Math
         $v->y *= $k;
         $v->z *= $k;
 
-        Magnitude($v);
+        self::Magnitude($v);
     }
 
     /* Returns the dot product of two vectors */
@@ -125,7 +125,7 @@ class Predict_Math
     }
 
     /* Four-quadrant arctan function */
-    public function AcTan($sinx, $cosx)
+    public static function AcTan($sinx, $cosx)
     {
         if ($cosx == 0) {
             if ($sinx > 0) {
@@ -138,7 +138,7 @@ class Predict_Math
                 if ($sinx > 0) {
                     return atan($sinx / $cosx);
                 } else {
-                    return Predict::twopi + atan($sinx / cosx);
+                    return Predict::twopi + atan($sinx / $cosx);
                 }
             } else {
                 return Predict::pi + atan($sinx / $cosx);
@@ -149,7 +149,7 @@ class Predict_Math
     /* Returns mod 2pi of argument */
     public static function FMod2p($x)
     {
-        $ret_val  = x;
+        $ret_val  = $x;
         $i        = $ret_val / Predict::twopi;
         $ret_val -= $i * Predict::twopi;
 
