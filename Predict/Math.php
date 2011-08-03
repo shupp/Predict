@@ -79,7 +79,7 @@ class Predict_Math
         $v2->x = $k * $v1->x;
         $v2->y = $k * $v1->y;
         $v2->z = $k * $v1->z;
-        $v2->w = abs(k) * $v1->w;
+        $v2->w = abs($k) * $v1->w;
     }
 
     /* Multiplies the vector v1 by the scalar k */
