@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Predict/Exception.php';
+
 class Predict_TLE
 {
     public $header;     /* Header line of TLE file */
