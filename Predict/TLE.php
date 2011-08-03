@@ -99,7 +99,7 @@ class Predict_TLE
         $this->omegao = (float) substr($line2, 34, 8);
 
         /* Satellite's Mean Anomaly of Orbit (degrees) */
-        $this->xmo = (float) substr($line2, 44, 8);
+        $this->xmo = (float) substr($line2, 43, 8);
 
         /* Satellite's Mean Motion (rev/day) */
         $this->xno = (float) substr($line2, 52, 11);
