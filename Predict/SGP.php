@@ -615,9 +615,9 @@ class Predict_SGP
                 $x6 = $a6 * $sat->deep_arg->sing;
                 $x7 = $a5 * $sat->deep_arg->cosg;
                 $x8 = $a6 * $sat->deep_arg->cosg;
-                $z31 = 12 * $x1 * $x1-3 * $x3 * $x3;
-                $z32 = 24 * $x1 * $x2-6 * $x3 * $x4;
-                $z33 = 12 * $x2 * $x2-3 * $x4 * $x4;
+                $z31 = 12 * $x1 * $x1 - 3 * $x3 * $x3;
+                $z32 = 24 * $x1 * $x2 - 6 * $x3 * $x4;
+                $z33 = 12 * $x2 * $x2 - 3 * $x4 * $x4;
                 $z1 = 3 * ($a1 * $a1 + $a2 * $a2) + $z31 * $sat->deep_arg->eosq;
                 $z2 = 6 * ($a1 * $a3 + $a2 * $a4) + $z32 * $sat->deep_arg->eosq;
                 $z3 = 3 * ($a3 * $a3 + $a4 * $a4) + $z33 * $sat->deep_arg->eosq;
@@ -716,7 +716,7 @@ class Predict_SGP
                 $eoc = $eq * $sat->deep_arg->eosq;
                 $g201 = -0.306 - ($eq - 0.64) * 0.440;
                 if ($eq <= 0.65) {
-                    $g211 = 3.616-13.247 * $eq + 16.290 * $sat->deep_arg->eosq;
+                    $g211 = 3.616 - 13.247 * $eq + 16.290 * $sat->deep_arg->eosq;
                     $g310 = -19.302 + 117.390 * $eq - 228.419 *
                         $sat->deep_arg->eosq + 156.591 * $eoc;
                     $g322 = -18.9068 + 109.7927 * $eq - 214.6334 *
@@ -739,7 +739,7 @@ class Predict_SGP
                     $g422 = -3581.69 + 16178.11 * $eq - 24462.77 *
                         $sat->deep_arg->eosq+ 12422.52 * $eoc;
                     if (eq <= 0.715) {
-                        $g520 = 1464.74-4664.75 * $eq + 3763.64 * $sat->deep_arg->eosq;
+                        $g520 = 1464.74 - 4664.75 * $eq + 3763.64 * $sat->deep_arg->eosq;
                     } else {
                         $g520 = -5149.66 + 29936.92 * $eq - 54087.36 *
                             $sat->deep_arg->eosq + 31324.56 * $eoc;
@@ -772,12 +772,12 @@ class Predict_SGP
                                    $sat->deep_arg->cosio - 3 * $sat->deep_arg->theta2);
                 $f441 = 35 * $sini2 * $f220;
                 $f442 = 39.3750 * $sini2 * $sini2;
-                $f522 = 9.84375 * $sat->deep_arg->sinio * ($sini2 * (1-2 * $sat->deep_arg->cosio - 5 *
+                $f522 = 9.84375 * $sat->deep_arg->sinio * ($sini2 * (1 - 2 * $sat->deep_arg->cosio - 5 *
                                        $sat->deep_arg->theta2) + 0.33333333 * (-2 + 4 * $sat->deep_arg->cosio +
                                                      6 * $sat->deep_arg->theta2));
                 $f523 = $sat->deep_arg->sinio * (4.92187512 * $sini2 * (-2 - 4 *
                                       $sat->deep_arg->cosio + 10 * $sat->deep_arg->theta2) + 6.56250012
-                            * (1 + 2 * $sat->deep_arg->cosio-3 * $sat->deep_arg->theta2));
+                            * (1 + 2 * $sat->deep_arg->cosio - 3 * $sat->deep_arg->theta2));
                 $f542 = 29.53125 * $sat->deep_arg->sinio * (2 - 8 *
                                  $sat->deep_arg->cosio + $sat->deep_arg->theta2 *
                                  (-12 + 8 * $sat->deep_arg->cosio + 10 * $sat->deep_arg->theta2));
@@ -828,7 +828,7 @@ class Predict_SGP
                 $sat->dps->fasx2 = 0.13130908;
                 $sat->dps->fasx4 = 2.8843198;
                 $sat->dps->fasx6 = 0.37448087;
-                $sat->dps->xlamo = $xmao + $sat->tle->xnodeo + $sat->tle->omegao-$sat->dps->thgr;
+                $sat->dps->xlamo = $xmao + $sat->tle->xnodeo + $sat->tle->omegao - $sat->dps->thgr;
                 $bfact = $sat->deep_arg->xmdot + $xpidot - Predict::thdt;
                 $bfact = $bfact + $sat->dps->ssl + $sat->dps->ssg + $sat->dps->ssh;
             } /* End if( !(xnq < 0.0052359877) && (xnq > 0.0034906585) ) */
@@ -885,7 +885,7 @@ class Predict_SGP
                 }
 
                 do {
-                    if (abs($sat->deep_arg->t-$sat->dps->atime) >= $sat->dps->stepp) {
+                    if (abs($sat->deep_arg->t - $sat->dps->atime) >= $sat->dps->stepp) {
                         $sat->flags |= self::DO_LOOP_FLAG;
                         $sat->flags &= ~self::EPOCH_RESTART_FLAG;
                     }
@@ -907,7 +907,7 @@ class Predict_SGP
                     if ($sat->flags & self::SYNCHRONOUS_FLAG) {
                         $xndot = $sat->dps->del1 * sin($sat->dps->xli - $sat->dps->fasx2) + $sat->dps->del2 * sin(2 * ($sat->dps->xli - $sat->dps->fasx4))
                             + $sat->dps->del3 * sin(3 * ($sat->dps->xli - $sat->dps->fasx6));
-                        $xnddt = $sat->dps->del1 * cos($sat->dps->xli-$sat->dps->fasx2) + 2 * $sat->dps->del2 * cos(2 * ($sat->dps->xli - $sat->dps->fasx4))
+                        $xnddt = $sat->dps->del1 * cos($sat->dps->xli - $sat->dps->fasx2) + 2 * $sat->dps->del2 * cos(2 * ($sat->dps->xli - $sat->dps->fasx4))
                             + 3 * $sat->dps->del3 * cos(3 * ($sat->dps->xli - $sat->dps->fasx6));
                     } else {
                         $xomi = $sat->dps->omegaq + $sat->deep_arg->omgdot * $sat->dps->atime;
@@ -964,7 +964,7 @@ class Predict_SGP
         case self::dpper: /* Entrance for lunar-solar periodics */
             $sinis = sin($sat->deep_arg->xinc);
             $cosis = cos($sat->deep_arg->xinc);
-            if (abs($sat->dps->savtsn-$sat->deep_arg->t) >= 30) {
+            if (abs($sat->dps->savtsn - $sat->deep_arg->t) >= 30) {
                 $sat->dps->savtsn = $sat->deep_arg->t;
                 $zm = $sat->dps->zmos + zns * $sat->deep_arg->t;
                 $zf = $zm + 2 * Predict::zes * sin($zm);
@@ -979,7 +979,7 @@ class Predict_SGP
                 $zm = $sat->dps->zmol + Predict::znl * $sat->deep_arg->t;
                 $zf = $zm + 2 * Predict::zel * sin($zm);
                 $sinzf = sin($zf);
-                $f2 = 0.5 * $sinzf * $sinzf-0.25;
+                $f2 = 0.5 * $sinzf * $sinzf - 0.25;
                 $f3 = -0.5 * $sinzf * cos($zf);
                 $sel = $sat->dps->ee2 * $f2 + $sat->dps->e3 * $f3;
                 $sil = $sat->dps->xi2 * $f2 + $sat->dps->xi3 * $f3;
