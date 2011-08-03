@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Predict.php';
+require_once 'Predict/SGP.php';
 require_once 'Predict/Vector.php';
 require_once 'Predict/SGSDPStatic.php';
 require_once 'Predict/DeepArg.php';
@@ -54,6 +55,7 @@ class Predict_Sat
         $headerParts    = explode(' ', $tle->header);
         $this->name     = $headerParts[0];
         $this->nickname = $this->name;
+        $this->tle      = $tle;
         $this->pos      = new Predict_Vector();
         $this->vel      = new Predict_Vector();
         $this->sgps     = new Predict_SGSDPStatic();
@@ -88,7 +90,7 @@ class Predict_Sat
         $dd2 = Predict::tothrd;
         $a1 = pow($dd1, $dd2);
         $r1 = cos($this->tle->xincl);
-        $dd1 = 1.0 - $this->tle.eo * $this->tle->eo;
+        $dd1 = 1.0 - $this->tle->eo * $this->tle->eo;
         $temp = Predict::ck2 * 1.5 * ($r1 * $r1 * 3.0 - 1.0) / pow($dd1, 1.5);
         $del1 = $temp / ($a1 * $a1);
         $ao = $a1 * (1.0 - $del1 * (Predict::tothrd * 0.5 + $del1 *
@@ -97,7 +99,7 @@ class Predict_Sat
         $xnodp = $this->tle->xno / ($delo + 1.0);
 
         /* Select a deep-space/near-earth ephemeris */
-        if (twopi/xnodp/xmnpda >= .15625) {
+        if (Predict::twopi / $xnodp / Predict::xmnpda >= .15625) {
             $this->flags |= Predict_SGP::DEEP_SPACE_EPHEM_FLAG;
         } else {
             $this->flags &= ~Predict_SGP::DEEP_SPACE_EPHEM_FLAG;
