@@ -53,7 +53,7 @@ class SGP
     /* structure with Keplerian orbital elements and pos and vel    */
     /* are vector_t structures returning ECI satellite position and */
     /* velocity. Use Convert_Sat_State() to convert to km and km/s.*/
-    public function SGP4 (Predict_Sat $sat, $tsince)
+    public function SGP4(Predict_Sat $sat, $tsince)
     {
         /* Initialization */
         if ($sat->flags & self::SGP4_INITIALIZED_FLAG) {
@@ -298,7 +298,7 @@ class SGP
     /* structure with Keplerian orbital elements and pos and vel    */
     /* are vector_t structures returning ECI satellite position and */
     /* velocity. Use Convert_Sat_State() to convert to km and km/s. */
-    public function SDP4 (Predict_Sat $sat, $tsince)
+    public function SDP4(Predict_Sat $sat, $tsince)
     {
         /* int i;
 
