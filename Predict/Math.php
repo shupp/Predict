@@ -185,4 +185,10 @@ class Predict_Math
         self::Scale_Vector(Predict::xkmper, $pos);
         self::Scale_Vector(Predict::xkmper * Predict::xmnpda / Predict::secday, $vel);
     }
+
+    /* Returns angle in radians from arg in degrees */
+    public static function Radians($arg)
+    {
+        return $arg * Predict::de2ra;
+    }
 }

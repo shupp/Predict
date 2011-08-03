@@ -27,18 +27,18 @@ class Predict_Solar
         $mjd = $time - 2415020.0;
         $year = 1900 + $mjd / 365.25;
         $T = ($mjd + Predict_Time::Delta_ET($year) / Predict::secday) / 36525.0;
-        $M = deg2rad(Predict_Math::Modulus(358.47583 + Predict_Math::Modulus(35999.04975 * $T, 360.0)
+        $M = Predict_Math::Radians(Predict_Math::Modulus(358.47583 + Predict_Math::Modulus(35999.04975 * $T, 360.0)
              - (0.000150 + 0.0000033 * $T) * ($T * $T), 360.0));
-        $L = deg2rad(Predict_Math::Modulus(279.69668 + Predict_Math::Modulus(36000.76892 * $T, 360.0)
+        $L = Predict_Math::Radians(Predict_Math::Modulus(279.69668 + Predict_Math::Modulus(36000.76892 * $T, 360.0)
              + 0.0003025 * ($T * $T), 360.0));
         $e = 0.01675104 - (0.0000418 + 0.000000126 * $T) * $T;
-        $C = deg2rad((1.919460 - (0.004789 + 0.000014 * $T) * $T) * sin($M)
+        $C = Predict_Math::Radians((1.919460 - (0.004789 + 0.000014 * $T) * $T) * sin($M)
              + (0.020094 - 0.000100 * $T) * sin(2 * $M) + 0.000293 * sin(3 * $M));
-        $O = deg2rad(Predict_Math::Modulus(259.18 - 1934.142 * $T, 360.0));
-        $Lsa = Predict_Math::Modulus($L + $C - deg2rad(0.00569 - 0.00479 * sin($O)), Predict::twopi);
+        $O = Predict_Math::Radians(Predict_Math::Modulus(259.18 - 1934.142 * $T, 360.0));
+        $Lsa = Predict_Math::Modulus($L + $C - Predict_Math::Radians(0.00569 - 0.00479 * sin($O)), Predict::twopi);
         $nu = Predict_Math::Modulus($M + $C, Predict::twopi);
         $R = 1.0000002 * (1 - ($e * $e)) / (1 + $e * cos($nu));
-        $eps = deg2rad(23.452294 - (0.0130125 + (0.00000164 - 0.000000503 * $T) * $T) * $T + 0.00256 * cos($O));
+        $eps = Predict_Math::Radians(23.452294 - (0.0130125 + (0.00000164 - 0.000000503 * $T) * $T) * $T + 0.00256 * cos($O));
         $R = Predict::AU * $R;
 
         $solar_vector->x = $R * cos($Lsa);
