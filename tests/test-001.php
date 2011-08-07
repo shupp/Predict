@@ -123,6 +123,8 @@ $tbl = new Console_Table();
 $tbl->setHeaders($headers);
 $tbl->addData($data);
 
+echo "DEEP_SPACE_EPHEM: " . ($sat->flags & Predict_SGPSDP::DEEP_SPACE_EPHEM_FLAG) . " (expected: 0)\n\n";
+
 echo $tbl->getTable();
 
 var_dump((microtime(true) - $start) * 1000);
