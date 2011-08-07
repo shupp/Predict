@@ -300,21 +300,6 @@ class Predict_SGPSDP
     /* velocity. Use Convert_Sat_State() to convert to km and km/s. */
     public function SDP4(Predict_Sat $sat, $tsince)
     {
-        /* int i;
-
-
-        double
-            a,axn,ayn,aynl,beta,betal,capu,cos2u,cosepw,cosik,
-            cosnok,cosu,cosuk,ecose,elsq,epw,esine,pl,theta4,
-            rdot,rdotk,rfdot,rfdotk,rk,sin2u,sinepw,sinik,
-            sinnok,sinu,sinuk,tempe,templ,tsq,u,uk,ux,uy,uz,
-            vx,vy,vz,xinck,xl,xlt,xmam,xmdf,xmx,xmy,xnoddf,
-            xnodek,xll,a1,a3ovk2,ao,c2,coef,coef1,x1m5th,
-            xhdot1,del1,r,delo,eeta,eta,etasq,perige,
-            psisq,tsi,qoms24,s4,pinvsq,temp,tempa,temp1,
-            temp2,temp3,temp4,temp5,temp6; */
-
-
         /* Initialization */
         if (~$sat->flags & self::SDP4_INITIALIZED_FLAG) {
 
