@@ -150,7 +150,7 @@ class Predict_Math
     public static function FMod2p($x)
     {
         $ret_val  = $x;
-        $i        = $ret_val / Predict::twopi;
+        $i        = (int) ($ret_val / Predict::twopi);
         $ret_val -= $i * Predict::twopi;
 
         if ($ret_val < 0) {
@@ -164,10 +164,12 @@ class Predict_Math
     public static function Modulus($arg1, $arg2)
     {
         $ret_val  = $arg1;
-        $i        = $ret_val / $arg2;
+        $i        = (int) ($ret_val / $arg2);
         $ret_val -= $i * $arg2;
 
-        if ($ret_val < 0) $ret_val += $arg2;
+        if ($ret_val < 0) {
+            $ret_val += $arg2;
+        }
 
         return $ret_val;
     }
