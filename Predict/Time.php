@@ -122,4 +122,16 @@ class Predict_Time
 
         return Predict::twopi * $GMST / Predict::secday;
     }
+
+    /**
+     * Read the system clock and return the current Julian day.
+     *
+     * @return float
+     */
+    public function get_current_daynum() {
+        // Gets the current decimal day number from microtime
+
+        list($usec, $sec) = explode(' ', microtime());
+        return ((($sec + 0.0000001 * $usec) / 86400.0) - 3651.0);
+    }
 }
