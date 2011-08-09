@@ -44,7 +44,7 @@ class Predict_Math
     /* Returns arccosine of rgument */
     public static function ArcCos($arg)
     {
-        return Predcit::pio2 - self::ArcSin($arg);
+        return Predict::pio2 - self::ArcSin($arg);
     }
 
     /* Calculates scalar magnitude of a Predict_Vector argument */

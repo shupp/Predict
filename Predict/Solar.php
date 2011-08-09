@@ -22,7 +22,7 @@ require_once 'Predict/Vector.php';
 class Predict_Solar
 {
     /* Calculates solar position vector */
-    public static function Calculate_Solar_Position(double $time, Predict_Vector $solar_vector)
+    public static function Calculate_Solar_Position($time, Predict_Vector $solar_vector)
     {
         $mjd = $time - 2415020.0;
         $year = 1900 + $mjd / 365.25;
@@ -42,8 +42,8 @@ class Predict_Solar
         $R = Predict::AU * $R;
 
         $solar_vector->x = $R * cos($Lsa);
-        $solar_vector->y = $R * sin($Lsa) * cos(eps);
-        $solar_vector->z = $R * sin($Lsa) * sin(eps);
+        $solar_vector->y = $R * sin($Lsa) * cos($eps);
+        $solar_vector->z = $R * sin($Lsa) * sin($eps);
         $solar_vector->w = $R;
     }
 

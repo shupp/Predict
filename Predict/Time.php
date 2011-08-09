@@ -129,10 +129,26 @@ class Predict_Time
      *
      * @return float
      */
-    public function get_current_daynum() {
+    public static function get_current_daynum() {
         // Gets the current decimal day number from microtime
 
         list($usec, $sec) = explode(' ', microtime());
         return ((($sec + 0.0000001 * $usec) / 86400.0) - 3651.0);
+    }
+
+    /* The function Delta_ET has been added to allow calculations on   */
+    /* the position of the sun.  It provides the difference between UT */
+    /* (approximately the same as UTC) and ET (now referred to as TDT).*/
+    /* This function is based on a least squares fit of data from 1950 */
+    /* to 1991 and will need to be updated periodically. */
+    public static function Delta_ET($year)
+    {
+      /* Values determined using data from 1950-1991 in the 1990
+         Astronomical Almanac.  See DELTA_ET.WQ1 for details. */
+
+      $delta_et = 26.465 + 0.747622 * ($year - 1950) +
+                 1.886913 * sin(Predict::twopi * ($year - 1975) / 33);
+
+      return $delta_et;
     }
 }

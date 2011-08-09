@@ -37,12 +37,12 @@ class Predict_SGPObs
         $achcp = (Predict::xkmper * $c + $geodetic->alt) * cos($geodetic->lat);
         $obs_pos->x = $achcp * cos($geodetic->theta); /*kilometers*/
         $obs_pos->y = $achcp * sin($geodetic->theta);
-        $obs_pos->z = (Predict::xkmper * sq + $geodetic->alt) * $sinGeodeticLat;
+        $obs_pos->z = (Predict::xkmper * $sq + $geodetic->alt) * $sinGeodeticLat;
         $obs_vel->x = -Predict::mfactor * $obs_pos->y; /*kilometers/second*/
         $obs_vel->y =  Predict::mfactor * $obs_pos->x;
         $obs_vel->z =  0;
-        Predict::Magnitude(obs_pos);
-        Predict::Magnitude(obs_vel);
+        Predict_Math::Magnitude($obs_pos);
+        Predict_Math::Magnitude($obs_vel);
     }
 
     /* Procedure Calculate_LatLonAlt will calculate the geodetic  */

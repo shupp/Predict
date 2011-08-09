@@ -382,7 +382,7 @@ class Predict
      * the new start time.
      *
      */
-    protected function find_aos(Predict_Sat $sat, Predict_QTH $qth, $start, $maxdt)
+    public function find_aos(Predict_Sat $sat, Predict_QTH $qth, $start, $maxdt)
     {
         $t = $start;
         $aostime = 0.0;
@@ -498,7 +498,7 @@ class Predict
             $sat_geodetic->lon += self::twopi;
         }
 
-        while (sat_geodetic.lon > (pi)) {
+        while ($sat_geodetic->lon > (self::pi)) {
             $sat_geodetic->lon -= self::twopi;
         }
 
@@ -518,7 +518,7 @@ class Predict
         $sat->footprint = 12756.33 * acos(self::xkmper / (self::xkmper + $sat->alt));
         $age = $sat->jul_utc - $sat->jul_epoch;
         $sat->orbit = floor(($sat->tle->xno * self::xmnpda / self::twopi +
-                        $age * $sat->tle->bstar * $ae) * $age +
+                        $age * $sat->tle->bstar * self::ae) * $age +
                         $sat->tle->xmo / self::twopi) + $sat->tle->revnum - 1;
     }
 
@@ -540,7 +540,7 @@ class Predict
      * lengthy loops.
      *
      */
-    protected function find_los(Predict_Sat $sat, Predict_QTH $qth, $start, $maxdt)
+    public function find_los(Predict_Sat $sat, Predict_QTH $qth, $start, $maxdt)
     {
         $t = $start;
         $lostime = 0.0;
@@ -551,7 +551,7 @@ class Predict
         /* check whether satellite has aos */
         if (($sat->otype == Predict_SGPSDP::ORBIT_TYPE_GEO) ||
             ($sat->otype == Predict_SGPSDP::ORBIT_TYPE_DECAYED) ||
-            !$this->has_aos (sat, qth)) {
+            !$this->has_aos ($sat, $qth)) {
 
             return 0.0;
         }
@@ -617,7 +617,7 @@ class Predict
      * This function can be used to find the AOS time in the past of the
      * current pass.
      */
-    protected function find_prev_aos(Predict_Sat $sat, Predict_QTH $qth, $start)
+    public function find_prev_aos(Predict_Sat $sat, Predict_QTH $qth, $start)
     {
         $aostime = $start;
 
@@ -640,5 +640,40 @@ class Predict
         }
 
         return $aostime;
+    }
+
+    /** Determine whether satellite ever reaches AOS.
+     *  @author John A. Magliacane, KD2BD
+     *  @author Alexandru Csete, OZ9AEC
+     *  @param sat Pointer to satellite data.
+     *  @return TRUE if the satellite will reach AOS, FALSE otherwise.
+     *
+     */
+    public function has_aos(Predict_Sat $sat, Predict_QTH $qth)
+    {
+         $retcode = false;
+
+         /* FIXME */
+         if ($sat->meanmo == 0.0) {
+              $retcode = false;
+         } else {
+
+            /* xincl is already in RAD by select_ephemeris */
+            $lin = $sat->tle->xincl;
+            if ($lin >= self::pio2) {
+                $lin = self::pi - $lin;
+            }
+
+            $sma = 331.25 * exp(log(1440.0 / $sat->meanmo) * (2.0 / 3.0));
+            $apogee = $sma * (1.0 + $sat->tle->eo) - self::xkmper;
+
+            if ((acos(self::xkmper / ($apogee + self::xkmper)) + ($lin)) > abs($qth->lat * self::de2ra)) {
+                $retcode = true;
+            } else {
+                $retcode = false;
+            }
+        }
+
+        return $retcode;
     }
 }
