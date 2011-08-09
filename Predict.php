@@ -607,4 +607,38 @@ class Predict
 
         return $lostime;
     }
+
+    /** Find AOS time of current pass.
+     *  @param sat The satellite to find AOS for.
+     *  @param qth The ground station.
+     *  @param start Start time, prefereably now.
+     *  @return The time of the previous AOS or 0.0 if the satellite has no AOS.
+     *
+     * This function can be used to find the AOS time in the past of the
+     * current pass.
+     */
+    protected function find_prev_aos(Predict_Sat $sat, Predict_QTH $qth, $start)
+    {
+        $aostime = $start;
+
+        /* make sure current sat values are
+            in sync with the time
+        */
+        $this->predict_calc($sat, $qth, $start);
+
+        /* check whether satellite has aos */
+        if (($sat->otype == Predict_SGPSDP::ORBIT_TYPE_GEO) ||
+            ($sat->otype == Predict_SGPSDP::ORBIT_TYPE_DECAYED) ||
+            !$this->has_aos($sat, $qth)) {
+
+            return 0.0;
+        }
+
+        while ($sat->el >= 0.0) {
+            $aostime -= 0.0005; // 0.75 min
+            $this->predict_calc($sat, $qth, $aostime);
+        }
+
+        return $aostime;
+    }
 }
