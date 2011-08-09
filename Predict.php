@@ -8,6 +8,7 @@ require_once 'Predict/Geodetic.php';
 require_once 'Predict/ObsSet.php';
 require_once 'Predict/Solar.php';
 require_once 'Predict/SGPObs.php';
+require_once 'Predict/SGPSDP.php';
 
 /**
  * Predict
@@ -363,5 +364,161 @@ class Predict
         }
 
         return $vis;
+    }
+
+    /** Find the AOS time of the next pass.
+     *  @author Alexandru Csete, OZ9AEC
+     *  @author John A. Magliacane, KD2BD
+     *  @param sat Pointer to the satellite data.
+     *  @param qth Pointer to the QTH data.
+     *  @param start The time where calculation should start.
+     *  @param maxdt The upper time limit in days (0.0 = no limit)
+     *  @return The time of the next AOS or 0.0 if the satellite has no AOS.
+     *
+     * This function finds the time of AOS for the first coming pass taking place
+     * no earlier that start.
+     * If the satellite is currently within range, the function first calls
+     * find_los to get the next LOS time. Then the calculations are done using
+     * the new start time.
+     *
+     */
+    protected function find_aos(Predict_Sat $sat, Predict_QTH $qth, $start, $maxdt)
+    {
+        $t = $start;
+        $aostime = 0.0;
+
+
+        /* make sure current sat values are
+            in sync with the time
+        */
+        $this->predict_calc($sat, $qth, $start);
+
+        /* check whether satellite has aos */
+        if (($sat->otype == Predict_SGPSDP::ORBIT_TYPE_GEO) ||
+            ($sat->otype == Predict_SGPSDP::ORBIT_TYPE_DECAYED) ||
+            !$this->has_aos($sat, $qth)) {
+
+            return 0.0;
+        }
+
+        if ($sat->el > 0.0) {
+            $t = $this->find_los($sat, $qth, $start, $maxdt) + 0.014; // +20 min
+        }
+
+        /* invalid time (potentially returned by find_los) */
+        if ($t < 0.1) {
+            return 0.0;
+        }
+
+        /* update satellite data */
+        $this->predict_calc($sat, $qth, $t);
+
+        /* use upper time limit */
+        if ($maxdt > 0.0) {
+
+            /* coarse time steps */
+            while (($sat->el < -1.0) && ($t <= ($start + $maxdt))) {
+                $t -= 0.00035 * ($sat->el * (($sat->alt / 8400.0) + 0.46) - 2.0);
+                $this->predict_calc($sat, $qth, $t);
+            }
+
+            /* fine steps */
+            while (($aostime == 0.0) && ($t <= ($start + $maxdt))) {
+
+                if (abs($sat->el) < 0.005) {
+                    $aostime = $t;
+                } else {
+                    $t -= $sat->el * sqrt($sat->alt) / 530000.0;
+                    $this->predict_calc($sat, $qth, $t);
+                }
+            }
+        } else {
+            /* don't use upper time limit */
+
+            /* coarse time steps */
+            while ($sat->el < -1.0) {
+
+                $t -= 0.00035 * ($sat->el * (($sat->alt / 8400.0) + 0.46) - 2.0);
+                $this->predict_calc($sat, $qth, $t);
+            }
+
+            /* fine steps */
+            while ($aostime == 0.0) {
+
+                if (abs($sat->el) < 0.005) {
+                    $aostime = $t;
+                } else {
+                    $t -= $sat->el * sqrt($sat->alt) / 530000.0;
+                    $this->predict_calc($sat, $qth, $t);
+                }
+
+            }
+        }
+
+        return $aostime;
+    }
+
+    /** SGP4SDP4 driver for doing AOS/LOS calculations.
+     *  @param sat Pointer to the satellite data.
+     *  @param qth Pointer to the QTH data.
+     *  @param t The time for calculation (Julian Date)
+     *
+     */
+    public function predict_calc(Predict_Sat $sat, Predict_QTH $qth, $t)
+    {
+        $obs_set      = new Predict_ObsSet();
+        $sat_geodetic = new Predict_Geodetic();
+        $obs_geodetic = new Predict_Geodetic();
+
+        $obs_geodetic->lon   = $qth->lon * self::de2ra;
+        $obs_geodetic->lat   = $qth->lat * self::de2ra;
+        $obs_geodetic->alt   = $qth->alt / 1000.0;
+        $obs_geodetic->theta = 0;
+
+        $sat->jul_utc = $t;
+        $sat->tsince = ($sat->jul_utc - $sat->jul_epoch) * self::xmnpda;
+
+        /* call the norad routines according to the deep-space flag */
+        $sgpsdp = new Predict_SGPSDP();
+        if ($sat->flags & Predict_SGPSDP::DEEP_SPACE_EPHEM_FLAG) {
+            $sgpsdp->SDP4($sat, $sat->tsince);
+        } else {
+            $sgpsdp->SGP4($sat, $sat->tsince);
+        }
+
+        Predict_Math::Convert_Sat_State($sat->pos, $sat->vel);
+
+        /* get the velocity of the satellite */
+        Predict_Math::Magnitude($sat->vel);
+        $sat->velo = $sat->vel->w;
+        Predict_SGPObs::Calculate_Obs($sat->jul_utc, $sat->pos, $sat->vel, $obs_geodetic, $obs_set);
+        Predict_SGPObs::Calculate_LatLonAlt($sat->jul_utc, $sat->pos, $sat_geodetic);
+
+        while ($sat_geodetic->lon < -self::pi) {
+            $sat_geodetic->lon += self::twopi;
+        }
+
+        while (sat_geodetic.lon > (pi)) {
+            $sat_geodetic->lon -= self::twopi;
+        }
+
+        $sat->az = Predict_Math::Degrees($obs_set->az);
+        $sat->el = Predict_Math::Degrees($obs_set->el);
+        $sat->range = $obs_set->range;
+        $sat->range_rate = $obs_set->range_rate;
+        $sat->ssplat = Predict_Math::Degrees($sat_geodetic->lat);
+        $sat->ssplon = Predict_Math::Degrees($sat_geodetic->lon);
+        $sat->alt = $sat_geodetic->alt;
+        $sat->ma = Predict_Math::Degrees($sat->phase);
+        $sat->ma *= 256.0 / 360.0;
+        $sat->phase = Predict_Math::Degrees($sat->phase);
+
+        /* same formulas, but the one from predict is nicer */
+        //sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
+        $sat->footprint = 12756.33 * acos(self::xkmper / (self::xkmper + $sat->alt));
+        $age = $sat->jul_utc - $sat->jul_epoch;
+        $sat->orbit = floor(($sat->tle->xno * self::xmnpda / self::twopi +
+                        $age * $sat->tle->bstar * $ae) * $age +
+                        $sat->tle->xmo / self::twopi) + $sat->tle->revnum - 1;
     }
 }
