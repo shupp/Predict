@@ -2,7 +2,7 @@
 
 require_once 'Predict/Time.php';
 require_once 'Predict/Pass.php';
-require_once 'Predict/PassDetails.php';
+require_once 'Predict/PassDetail.php';
 require_once 'Predict/Vector.php';
 require_once 'Predict/Geodetic.php';
 require_once 'Predict/ObsSet.php';
@@ -227,7 +227,7 @@ class Predict
                     }
 
                     /* append details to sat->details */
-                    $detail             = new Predict_PassDetails();
+                    $detail             = new Predict_PassDetail();
                     $detail->time       = $t;
                     $detail->pos->x     = $sat->pos->x;
                     $detail->pos->y     = $sat->pos->y;
