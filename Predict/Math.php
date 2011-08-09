@@ -193,4 +193,10 @@ class Predict_Math
     {
         return $arg * Predict::de2ra;
     }
+
+    /* Returns angle in degrees from arg in rads */
+    public static function Degrees($arg)
+    {
+      return $arg / Predict::de2ra;
+    }
 }
