@@ -521,4 +521,90 @@ class Predict
                         $age * $sat->tle->bstar * $ae) * $age +
                         $sat->tle->xmo / self::twopi) + $sat->tle->revnum - 1;
     }
+
+    /** Find the LOS time of the next pass.
+     *  @author Alexandru Csete, OZ9AEC
+     *  @author John A. Magliacane, KD2BD
+     *  @param sat Pointer to the satellite data.
+     *  @param qth Pointer to the QTH data.
+     *  @param start The time where calculation should start.
+     *  @param maxdt The upper time limit in days (0.0 = no limit)
+     *  @return The time of the next LOS or 0.0 if the satellite has no LOS.
+     *
+     * This function finds the time of LOS for the first coming pass taking place
+     * no earlier that start.
+     * If the satellite is currently out of range, the function first calls
+     * find_aos to get the next AOS time. Then the calculations are done using
+     * the new start time.
+     * The function has a built-in watchdog to ensure that we don't end up in
+     * lengthy loops.
+     *
+     */
+    protected function find_los(Predict_Sat $sat, Predict_QTH $qth, $start, $maxdt)
+    {
+        $t = $start;
+        $lostime = 0.0;
+
+
+        $this->predict_calc($sat, $qth, $start);
+
+        /* check whether satellite has aos */
+        if (($sat->otype == Predict_SGPSDP::ORBIT_TYPE_GEO) ||
+            ($sat->otype == Predict_SGPSDP::ORBIT_TYPE_DECAYED) ||
+            !$this->has_aos (sat, qth)) {
+
+            return 0.0;
+        }
+
+        if ($sat->el < 0.0)
+            $t = $this->find_aos($sat, $qth, $start, $maxdt) + 0.001; // +1.5 min
+
+        /* invalid time (potentially returned by find_aos) */
+        if ($t < 0.01) {
+            return 0.0;
+        }
+
+        /* update satellite data */
+        $this->predict_calc($sat, $qth, $t);
+
+        /* use upper time limit */
+        if ($maxdt > 0.0) {
+
+            /* coarse steps */
+            while (($sat->el >= 1.0) && ($t <= ($start + $maxdt))) {
+                $t += cos(($sat->el - 1.0) * self::de2ra) * sqrt($sat->alt) / 25000.0;
+                $this->predict_calc($sat, $qth, $t);
+            }
+
+            /* fine steps */
+            while (($lostime == 0.0) && ($t <= ($start + $maxdt)))  {
+
+                $t += $sat->el * sqrt($sat->alt) / 502500.0;
+                $this->predict_calc($sat, $qth, $t);
+
+                if (abs($sat->el) < 0.005)
+                    $lostime = $t;
+            }
+        } else {
+        /* don't use upper limit */
+
+            /* coarse steps */
+            while ($sat->el >= 1.0) {
+                $t += cos(($sat->el - 1.0) * self::de2ra) * sqrt($sat->alt) / 25000.0;
+                $this->predict_calc($sat, $qth, $t);
+            }
+
+            /* fine steps */
+            while (lostime == 0.0) {
+
+                $t += $sat->el * sqrt($sat->alt) / 502500.0;
+                $this->predict_calc($sat, $qth, $t);
+
+                if (abs($sat->el) < 0.005)
+                    $lostime = $t;
+            }
+        }
+
+        return $lostime;
+    }
 }
