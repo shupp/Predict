@@ -556,8 +556,9 @@ class Predict
             return 0.0;
         }
 
-        if ($sat->el < 0.0)
+        if ($sat->el < 0.0) {
             $t = $this->find_aos($sat, $qth, $start, $maxdt) + 0.001; // +1.5 min
+        }
 
         /* invalid time (potentially returned by find_aos) */
         if ($t < 0.01) {
