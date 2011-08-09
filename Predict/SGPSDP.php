@@ -46,6 +46,9 @@ class Predict_SGPSDP
     const dpsec  = 2; /* Deep-space secular code        */
     const dpper  = 3; /* Deep-space periodic code       */
 
+    /* An int variable holding the single-bit flags */
+    public static $Flags = 0;
+
     /* SGP4 */
     /* This function is used to calculate the position and velocity */
     /* of near-earth (period < 225 minutes) satellites. tsince is   */
@@ -1024,5 +1027,26 @@ class Predict_SGPSDP
         } /* End switch(ientry) */
 
     } /* End of Deep() */
+
+    /* Functions for testing and setting/clearing flags */
+    public static function isFlagSet($flag)
+    {
+      return self::$Flags & $flag;
+    }
+
+    public static function isFlagClear($flag)
+    {
+      return ~self::$Flags & $flag;
+    }
+
+    public static function SetFlag($flag)
+    {
+      self::$Flags |= $flag;
+    }
+
+    public static function ClearFlag($flag)
+    {
+      self::$Flags &= ~$flag;
+    }
 }
 ?>
