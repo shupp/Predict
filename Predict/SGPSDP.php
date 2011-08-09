@@ -40,6 +40,20 @@ class Predict_SGPSDP
     const VISIBLE_FLAG          = 0x002000;
     const SAT_ECLIPSED_FLAG     = 0x004000;
 
+    /* orbit_type_t struct */
+    const ORBIT_TYPE_UNKNOWN = 0;
+    const ORBIT_TYPE_LEO     = 1;            /*!< Low Earth orbit, up to 1200 km. */
+    const ORBIT_TYPE_ICO     = 2;            /*!< Intermediate Circular Orbit, up to 1400 km. */
+    const ORBIT_TYPE_GEO     = 3;            /*!< Geostationary. */
+    const ORBIT_TYPE_GSO     = 4;            /*!< Geosynchronuous. */
+    const ORBIT_TYPE_MOLNIYA = 5;
+    const ORBIT_TYPE_TUNDRA  = 6;
+    const ORBIT_TYPE_POLAR   = 7;
+    const ORBIT_TYPE_SUNSYNC = 8;
+    const ORBIT_TYPE_DECAYED = 9;
+
+
+
     /* Entry points of Deep()
     // FIXME: Change to enu */
     const dpinit = 1; /* Deep-space initialization code */
