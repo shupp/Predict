@@ -1,7 +1,7 @@
 <?php
 
 /** Brief satellite pass info. */
-Predict_Pass
+class Predict_Pass
 {
     public $satname;  /*!< satellite name */
     public $aos;      /*!< AOS time in "jul_utc" */
