@@ -111,6 +111,7 @@ class Predict_Time
         return Predict_Math::FMod2p(6.3003880987 * $deep_arg->ds50 + 1.72944494);
     }
 
+    /* See the ThetaG doc block above */
     public static function ThetaG_JD($jd)
     {
         /* Reference:  The 1992 Astronomical Almanac, page B6. */
