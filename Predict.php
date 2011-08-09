@@ -595,7 +595,7 @@ class Predict
             }
 
             /* fine steps */
-            while (lostime == 0.0) {
+            while ($lostime == 0.0) {
 
                 $t += $sat->el * sqrt($sat->alt) / 502500.0;
                 $this->predict_calc($sat, $qth, $t);
