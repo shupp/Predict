@@ -132,8 +132,9 @@ class Predict_SGPObs
         if ($top_s > 0) {
             $azim = $azim + Predict::pi;
         }
-        if ($azim < 0 )
+        if ($azim < 0 ) {
             $azim = $azim + Predict::twopi;
+        }
         $el = Predict_Math::ArcSin($top_z / $range->w);
         $obs_set->az = $azim;        /* Azimuth (radians)  */
         $obs_set->el = $el;          /* Elevation (radians)*/
