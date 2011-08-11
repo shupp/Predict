@@ -32,6 +32,7 @@ class Predict
     const xke      =  7.43669161E-2;
     const xkmper   =  6.378135E3;      /* Earth radius km */
     const xmnpda   =  1.44E3;          /* Minutes per day */
+    const km2mi    =  0.621371;        /* Kilometers per Mile */
     const ae       =  1.0;
     const ck2      =  5.413079E-4;
     const ck4      =  6.209887E-7;
