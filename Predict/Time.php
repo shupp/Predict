@@ -152,4 +152,36 @@ class Predict_Time
 
       return $delta_et;
     }
+
+    /**
+     * Converts a daynum to a unix timestamp.  From phpPredict.
+     *
+     * @param float $dn Julian Daynum
+     *
+     * @return float
+     */
+    public static function daynum2unix($dn) {
+        // Converts a daynum to a UNIX timestamp
+
+        return (86400.0 * ($dn - 2444238.5 + 3651.0));
+    }
+
+    /**
+     * Converts a daynum to a readable time format.
+     *
+     * @param float $dn The julian date
+     * @param string $zone The zone string, defaults to America/Los_Angeles
+     * @param string $format The date() function's format string.  Defaults to m-d-Y H:i:s
+     *
+     * @return string
+     */
+    public static function daynum2readable($dn, $zone = 'America/Los_Angeles', $format = 'm-d-Y H:i:s')
+    {
+        $unix = self::daynum2unix($dn);
+        $date = new DateTime();
+        $date->setTimestamp($unix);
+        $dateTimezone = new DateTimezone($zone);
+        $date->setTimezone($dateTimezone);
+        return $date->format($format);
+    }
 }
