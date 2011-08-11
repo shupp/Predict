@@ -677,4 +677,57 @@ class Predict
 
         return $retcode;
     }
+
+    /** Predict passes after a certain time.
+     *
+     *
+     * This function calculates num upcoming passes with AOS no earlier
+     * than t = start and not later that t = (start+maxdt). The function will
+     *  repeatedly call get_pass until
+     * the number of predicted passes is equal to num, the time has reached
+     * limit or the get_pass function returns NULL.
+     *
+     * note For no time limit use maxdt = 0.0
+     *
+     * note the data in sat will be corrupt (future) and must be refreshed
+     *      by the caller, if the caller will need it later on (eg. if the caller
+     *      is GtkSatList).
+     *
+     * note Prepending to a singly linked list is much faster than appending.
+     *      Therefore, the elements are prepended whereafter the GSList is
+     *      reversed
+     */
+    public function get_passes(Predict_Sat $sat, Predict_QTH $qth, $start, $maxdt, $num = 0)
+    {
+        $passes = array();
+
+        /* if no number has been specified
+            set it to something big */
+        if ($num == 0) {
+            $num = 100;
+        }
+
+        $t = $start;
+
+        for ($i = 0; $i < $num; $i++) {
+            $pass = $this->get_pass($sat, $qth, $t, $maxdt);
+
+            if ($pass != null) {
+                $passes[] = $pass;
+                $t = $pass->los + 0.014; // +20 min
+
+                /* if maxdt > 0.0 check whether we have reached t = start+maxdt
+                    if yes finish predictions
+                */
+                if (($maxdt > 0.0) && ($t >= ($start + $maxdt))) {
+                    $i = $num;
+                }
+            } else {
+                /* we can't get any more passes */
+                $i = $num;
+            }
+        }
+
+        return $passes;
+    }
 }
