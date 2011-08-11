@@ -185,7 +185,6 @@ class Predict
                     maxdt = 0 mean no time limit.
                 */
                 $done = true;
-
             } else {
                 //los = find_los (sat, qth, aos + 0.001, maxdt); // +1.5 min later
                 $dt = $los - $aos;
@@ -583,8 +582,9 @@ class Predict
                 $t += $sat->el * sqrt($sat->alt) / 502500.0;
                 $this->predict_calc($sat, $qth, $t);
 
-                if (abs($sat->el) < 0.005)
+                if (abs($sat->el) < 0.005) {
                     $lostime = $t;
+                }
             }
         } else {
         /* don't use upper limit */
