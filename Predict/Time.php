@@ -67,12 +67,12 @@ class Predict_Time
         /* Astronomical Formulae for Calculators, Jean Meeus, */
         /* pages 23-25. Calculate Julian Date of 0.0 Jan year */
         $year = $year - 1;
-        $i = $year / 100;
+        $i = (int) ($year / 100);
         $A = $i;
-        $i = $A / 4;
-        $B = 2 - $A + $i;
-        $i = 365.25 * $year;
-        $i += 30.6001 * 14;
+        $i = (int) ($A / 4);
+        $B = (int) (2 - $A + $i);
+        $i = (int) (365.25 * $year);
+        $i += (int) (30.6001 * 14);
         $jdoy = $i + 1720994.5 + $B;
 
         return $jdoy;
