@@ -210,7 +210,7 @@ class Predict_SGPSDP
         $a = $sat->sgps->aodp * pow($tempa, 2);
         $e = $sat->tle->eo - $tempe;
         $xl = $xmp + $omega + $xnode + $sat->sgps->xnodp * $templ;
-        $beta = sqrt(1.0 - $e * $e);
+        $beta = sqrt(1.0 - ($e * $e));
         $xn = Predict::xke / pow($a, 1.5);
 
         /* Long period periodics */
