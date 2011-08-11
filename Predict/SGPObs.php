@@ -93,16 +93,10 @@ class Predict_SGPObs
     /* incorporating atmospheric refraction.                              */
     public static function Calculate_Obs($_time, Predict_Vector $pos, Predict_Vector $vel, Predict_Geodetic $geodetic, Predict_ObsSet $obs_set)
     {
-        /* double
-            sin_lat,cos_lat,
-            sin_theta,cos_theta,
-            el,azim,
-            top_s,top_e,top_z; */
-
-            $obs_pos = new Predict_Vector();
-            $obs_vel = new Predict_Vector();
-            $range   = new Predict_Vector();
-            $rgvel   = new Predict_Vector();
+        $obs_pos = new Predict_Vector();
+        $obs_vel = new Predict_Vector();
+        $range   = new Predict_Vector();
+        $rgvel   = new Predict_Vector();
 
         self::Calculate_User_PosVel($_time, $geodetic, $obs_pos, $obs_vel);
 
