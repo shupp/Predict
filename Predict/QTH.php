@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Predict_QTH
+ *
+ * Holds information about the observer's location (aka ground station)
+ */
 class Predict_QTH
 {
      public $name;   /*!< Name, eg. callsign. */

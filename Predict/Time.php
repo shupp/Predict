@@ -1,7 +1,8 @@
 <?php
 
 /*
- * Functions from sgp_time.c and time-tools.c ported to PHP by Bill Shupp
+ * Functions from sgp_time.c and time-tools.c (except where noted)
+ * ported to PHP by Bill Shupp
  */
 
 require_once 'Predict.php';
@@ -125,7 +126,7 @@ class Predict_Time
     }
 
     /**
-     * Read the system clock and return the current Julian day.
+     * Read the system clock and return the current Julian day.  From phpPredict
      *
      * @return float
      */

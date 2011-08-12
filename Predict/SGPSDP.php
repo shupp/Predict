@@ -1,6 +1,6 @@
 <?php
 /*
- * Ported by Bill Shupp from the sgp4sdp4 code in gpredict
+ * Ported to PHP by Bill Shupp from the sgp4sdp4 code in gpredict
  *
  * Original comments below
  */

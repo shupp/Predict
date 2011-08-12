@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Ported to PHP from gpredict by Bill Shupp
+ */
+
 require_once 'Predict.php';
 require_once 'Predict/SGPSDP.php';
 require_once 'Predict/Vector.php';
@@ -11,6 +15,9 @@ require_once 'Predict/ObsSet.php';
 require_once 'Predict/Time.php';
 require_once 'Predict/Math.php';
 
+/**
+ * Contains satellite data and related methods.
+ */
 class Predict_Sat
 {
     public $name     = null;

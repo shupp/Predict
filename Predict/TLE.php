@@ -1,7 +1,15 @@
 <?php
+/**
+ * Ported from gpredict to PHP by Bill Shupp.  License: GPL 2.
+ */
 
 require_once 'Predict/Exception.php';
 
+/**
+ * Predict_TLE
+ *
+ * All routines for parsing and validating NORAD two line element sets
+ */
 class Predict_TLE
 {
     public $header;     /* Header line of TLE file */

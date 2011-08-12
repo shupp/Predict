@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Predict_SGPObs
+ *
+ * Ported to PHP by Bill Shupp.  Original comments below
+ */
+
 require_once 'Predict/Math.php';
 require_once 'Predict/Time.php';
 require_once 'Predict.php';
