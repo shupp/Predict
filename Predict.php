@@ -1,5 +1,40 @@
 <?php
 
+/*
+    A limited PHP port of the gpredict program, done by Bill Shupp.
+    Original notes and author information is below.  GPL2 license.
+    ===============================================================
+
+
+
+    Gpredict: Real-time satellite tracking and orbit prediction program
+
+    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Parts are Copyright John A. Magliacane, KD2BD 1991-2003 (indicated below)
+
+    Authors: Alexandru Csete <oz9aec@gmail.com>
+             John A. Magliacane, KD2BD.
+
+    Comments, questions and bugreports should be submitted via
+    http://sourceforge.net/projects/gpredict/
+    More details can be found at the project home page:
+
+            http://gpredict.oz9aec.net/
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, visit http://www.fsf.org/
+*/
+
 require_once 'Predict/Time.php';
 require_once 'Predict/Pass.php';
 require_once 'Predict/PassDetail.php';
@@ -11,11 +46,8 @@ require_once 'Predict/SGPObs.php';
 require_once 'Predict/SGPSDP.php';
 
 /**
- * Predict
- *
- * A limited PHP port of the gpredict program.  Port by Bill Shupp.
- *
- * @license   GPL 2
+ * The main Predict class.  Contains constants for use by other classes, as well as
+ * the prediction logic.
  */
 class Predict
 {
@@ -111,26 +143,22 @@ class Predict
         return $this->get_pass($sat, $qth, $now, $maxdt);
     }
 
-    /** \brief Predict first pass after a certain time.
-     *  \param sat Pointer to the satellite data.
-     *  \param qth Pointer to the location data.
-     *  \param start Starting time.
-     *  \param maxdt The maximum number of days to look ahead (0 for no limit).
-     *  \return Pointer to a newly allocated pass_t structure or NULL if
-     *          there was an error.
+    /** Predict first pass after a certain time.
+     *
+     *  @param Predict_Sat $sat   The satellite data.
+     *  @param Predict_QTH $qth   The observer's location data.
+     *  @param float       $start Starting time.
+     *  @param int         $maxdt The maximum number of days to look ahead (0 for no limit).
+     *
+     *  @return Predict_Pass or NULL if there was an error.
      *
      * This function will find the first upcoming pass with AOS no earlier than
      * t = start and no later than t = (start+maxdt).
      *
-     * \note For no time limit use maxdt = 0.0
+     *  note For no time limit use maxdt = 0.0
      *
-     * \note the data in sat will be corrupt (future) and must be refreshed
-     *       by the caller, if the caller will need it later on (eg. if the caller
-     *       is GtkSatList).
-     *
-     * \note Prepending to a singly linked list is much faster than appending.
-     *       Therefore, the elements are prepended whereafter the GSList is
-     *       reversed
+     *  note the data in sat will be corrupt (future) and must be refreshed
+     *       by the caller, if the caller will need it later on
      */
     public function get_pass(Predict_Sat $sat_in, Predict_QTH $qth, $start, $maxdt)
     {
@@ -310,11 +338,11 @@ class Predict
     /**
      * Calculate satellite visibility.
      *
-     * @param Predict_Sat $sat The satellite structure.
-     * @param Predict_QTH $qth The QTH
-     * @param float $jul_utc The time at which the visibility should be calculated.
+     * @param Predict_Sat $sat     The satellite structure.
+     * @param Predict_QTH $qth     The QTH
+     * @param float       $jul_utc The time at which the visibility should be calculated.
      *
-     * @return void The visiblity code.
+     * @return int The visiblity constant, 0, 1, 2, or 3 (see above)
      */
     public function get_sat_vis(Predict_Sat $sat, Predict_QTH $qth, $jul_utc)
     {
@@ -369,11 +397,11 @@ class Predict
     /** Find the AOS time of the next pass.
      *  @author Alexandru Csete, OZ9AEC
      *  @author John A. Magliacane, KD2BD
-     *  @param sat Pointer to the satellite data.
-     *  @param qth Pointer to the QTH data.
-     *  @param start The time where calculation should start.
-     *  @param maxdt The upper time limit in days (0.0 = no limit)
-     *  @return The time of the next AOS or 0.0 if the satellite has no AOS.
+     *  @param Predict_Sat $sat   The satellite data.
+     *  @param Predict_QTH $qth   The observer's location (QTH) data.
+     *  @param float       $start The julian date where calculation should start.
+     *  @param int         $maxdt The upper time limit in days (0.0 = no limit)
+     *  @return The julain date of the next AOS or 0.0 if the satellite has no AOS.
      *
      * This function finds the time of AOS for the first coming pass taking place
      * no earlier that start.
@@ -459,9 +487,9 @@ class Predict
     }
 
     /** SGP4SDP4 driver for doing AOS/LOS calculations.
-     *  @param sat Pointer to the satellite data.
-     *  @param qth Pointer to the QTH data.
-     *  @param t The time for calculation (Julian Date)
+     *  @param Predict_Sat $sat The satellite data.
+     *  @param Predict_QTH $qth The QTH observer location data.
+     *  @param float       $t   The time for calculation (Julian Date)
      *
      */
     public function predict_calc(Predict_Sat $sat, Predict_QTH $qth, $t)
@@ -525,11 +553,11 @@ class Predict
     /** Find the LOS time of the next pass.
      *  @author Alexandru Csete, OZ9AEC
      *  @author John A. Magliacane, KD2BD
-     *  @param sat Pointer to the satellite data.
-     *  @param qth Pointer to the QTH data.
-     *  @param start The time where calculation should start.
-     *  @param maxdt The upper time limit in days (0.0 = no limit)
-     *  @return The time of the next LOS or 0.0 if the satellite has no LOS.
+     *  @param Predict_Sat $sat The satellite data.
+     *  @param Predict_QTH $qth The QTH observer location data.
+     *  @param float       $start The time where calculation should start. (Julian Date)
+     *  @param int         $maxdt The upper time limit in days (0.0 = no limit)
+     *  @return The time (julian date) of the next LOS or 0.0 if the satellite has no LOS.
      *
      * This function finds the time of LOS for the first coming pass taking place
      * no earlier that start.
@@ -611,9 +639,9 @@ class Predict
     }
 
     /** Find AOS time of current pass.
-     *  @param sat The satellite to find AOS for.
-     *  @param qth The ground station.
-     *  @param start Start time, prefereably now.
+     *  @param Predict_Sat $sat   The satellite to find AOS for.
+     *  @param Predict_QTH $qth   The ground station.
+     *  @param float       $start Start time, prefereably now.
      *  @return The time of the previous AOS or 0.0 if the satellite has no AOS.
      *
      * This function can be used to find the AOS time in the past of the
@@ -647,8 +675,9 @@ class Predict
     /** Determine whether satellite ever reaches AOS.
      *  @author John A. Magliacane, KD2BD
      *  @author Alexandru Csete, OZ9AEC
-     *  @param sat Pointer to satellite data.
-     *  @return TRUE if the satellite will reach AOS, FALSE otherwise.
+     *  @param Predict_Sat $sat The satellite data.
+     *  @param Predict_QTH $qth The observer's location data
+     *  @return bool true if the satellite will reach AOS, false otherwise.
      *
      */
     public function has_aos(Predict_Sat $sat, Predict_QTH $qth)
@@ -697,6 +726,14 @@ class Predict
      * note Prepending to a singly linked list is much faster than appending.
      *      Therefore, the elements are prepended whereafter the GSList is
      *      reversed
+     *
+     *
+     * @param Predict_Sat  $sat The satellite data
+     * @param Predict_QTH  $qth The observer's location data
+     * @param float $start The start julian date
+     * @param int   $maxdt The max # of days to look
+     * @param int   $num   The max # of passes to get
+     * @return array of Predict_Pass instances if found, empty array otherwise
      */
     public function get_passes(Predict_Sat $sat, Predict_QTH $qth, $start, $maxdt, $num = 0)
     {
