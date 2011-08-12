@@ -320,7 +320,7 @@ class Predict_SGPSDP
         /* Initialization */
         if (~$sat->flags & self::SDP4_INITIALIZED_FLAG) {
 
-            $sat->flags |= SDP4_INITIALIZED_FLAG;
+            $sat->flags |= self::SDP4_INITIALIZED_FLAG;
 
             /* Recover original mean motion (xnodp) and   */
             /* semimajor axis (aodp) from input elements. */
@@ -333,7 +333,7 @@ class Predict_SGPSDP
             $sat->deep_arg->betao = sqrt($sat->deep_arg->betao2);
             $del1 = 1.5 * Predict::ck2 * $sat->sgps->x3thm1 /
                 ($a1 * $a1 * $sat->deep_arg->betao * $sat->deep_arg->betao2);
-            $ao = $a1 * (1.0 - del1 * (0.5 * Predict::tothrd + $del1 * (1.0 + 134.0 / 81.0 * $del1)));
+            $ao = $a1 * (1.0 - $del1 * (0.5 * Predict::tothrd + $del1 * (1.0 + 134.0 / 81.0 * $del1)));
             $delo = 1.5 * Predict::ck2 * $sat->sgps->x3thm1 /
                 ($ao * $ao * $sat->deep_arg->betao * $sat->deep_arg->betao2);
             $sat->deep_arg->xnodp = $sat->tle->xno / (1.0 + $delo);
@@ -398,7 +398,7 @@ class Predict_SGPSDP
             $sat->deep_arg->xnodot = $xhdot1 + (0.5 * $temp2 * (4.0 - 19.0 * $sat->deep_arg->theta2) +
                              2.0 * $temp3 * (3.0 - 7.0 * $sat->deep_arg->theta2)) *
                 $sat->deep_arg->cosio;
-            $sat->sgps->xnodcf = 3.5 * $sat->deep_arg->betao2 * xhdot1 * $sat->sgps->c1;
+            $sat->sgps->xnodcf = 3.5 * $sat->deep_arg->betao2 * $xhdot1 * $sat->sgps->c1;
             $sat->sgps->t2cof = 1.5 * $sat->sgps->c1;
             $sat->sgps->xlcof = 0.125 * $a3ovk2 * $sat->deep_arg->sinio *
                 (3.0 + 5.0 * $sat->deep_arg->cosio) / (1.0 + $sat->deep_arg->cosio);
@@ -421,8 +421,8 @@ class Predict_SGPSDP
         $sat->deep_arg->xn = $sat->deep_arg->xnodp;
 
         /* Update for deep-space secular effects */
-        $sat->deep_arg->xll = xmdf;
-        $sat->deep_arg->t = tsince;
+        $sat->deep_arg->xll = $xmdf;
+        $sat->deep_arg->t = $tsince;
 
         $this->Deep(self::dpsec, $sat);
 
@@ -476,8 +476,8 @@ class Predict_SGPSDP
         $pl = $a * $temp;
         $r = $a * (1.0 - $ecose);
         $temp1 = 1.0 / $r;
-        $rdot = Predict::xke * sqrt(a) * $esine * $temp1;
-        $rfdot = Predict::xke * sqrt(pl) * $temp1;
+        $rdot = Predict::xke * sqrt($a) * $esine * $temp1;
+        $rfdot = Predict::xke * sqrt($pl) * $temp1;
         $temp2 = $a * $temp1;
         $betal = sqrt($temp);
         $temp3 = 1.0 / (1.0 + $betal);
@@ -560,7 +560,7 @@ class Predict_SGPSDP
             /* Initialize lunar solar terms */
             $day = $sat->deep_arg->ds50 + 18261.5;  /* Days since 1900 Jan 0.5 */
             if ($day != $sat->dps->preep) {
-                $sat->dps->preep = day;
+                $sat->dps->preep = $day;
                 $xnodce = 4.5236020 - 9.2422029E-4 * $day;
                 $stem = sin($xnodce);
                 $ctem = cos($xnodce);
@@ -572,7 +572,7 @@ class Predict_SGPSDP
                 $gam = 5.8351514 + 0.0019443680 * $day;
                 $sat->dps->zmol = Predict_Math::FMod2p($c - $gam);
                 $zx = 0.39785416 * $stem / $sat->dps->zsinil;
-                $zy = $sat->dps->zcoshl * ctem + 0.91744867 * $sat->dps->zsinhl * stem;
+                $zy = $sat->dps->zcoshl * $ctem + 0.91744867 * $sat->dps->zsinhl * $stem;
                 $zx = Predict_Math::AcTan($zx, $zy);
                 $zx = $gam + $zx - $xnodce;
                 $sat->dps->zcosgl = cos($zx);
@@ -690,9 +690,9 @@ class Predict_SGPSDP
                 $zsini = $sat->dps->zsinil;
                 $zcosh = $sat->dps->zcoshl * $cosq + $sat->dps->zsinhl * $sinq;
                 $zsinh = $sinq * $sat->dps->zcoshl - $cosq * $sat->dps->zsinhl;
-                $zn = $znl;
-                $cc = $c1l;
-                $ze = $zel;
+                $zn = Predict::znl;
+                $cc = Predict::c1l;
+                $ze = Predict::zel;
                 $zmo = $sat->dps->zmol;
                 $sat->flags |= self::LUNAR_TERMS_DONE_FLAG;
             } /* End of for(;;) */
@@ -968,7 +968,7 @@ class Predict_SGPSDP
             $cosis = cos($sat->deep_arg->xinc);
             if (abs($sat->dps->savtsn - $sat->deep_arg->t) >= 30) {
                 $sat->dps->savtsn = $sat->deep_arg->t;
-                $zm = $sat->dps->zmos + zns * $sat->deep_arg->t;
+                $zm = $sat->dps->zmos + Predict::zns * $sat->deep_arg->t;
                 $zf = $zm + 2 * Predict::zes * sin($zm);
                 $sinzf = sin($zf);
                 $f2 = 0.5 * $sinzf * $sinzf - 0.25;

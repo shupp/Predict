@@ -101,10 +101,10 @@ class Predict_Time
         }
         /* End modification */
 
-        $UT = modf($day, $day);
+        $UT = fmod($day, $day);
         $jd = self::Julian_Date_of_Year($year) + $day;
         $TU = ($jd - 2451545.0) / 36525;
-        $GMST = 24110.54841 + TU * (8640184.812866 + $TU * (0.093104 - $TU * 6.2E-6));
+        $GMST = 24110.54841 + $TU * (8640184.812866 + $TU * (0.093104 - $TU * 6.2E-6));
         $GMST = Predict_Math::Modulus($GMST + Predict::secday * Predict::omega_E * $UT, Predict::secday);
         $deep_arg->ds50 = $jd - 2433281.5 + $UT;
 
