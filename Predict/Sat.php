@@ -154,7 +154,7 @@ class Predict_Sat
         Predict_Math::Convert_Sat_State($sat->pos, $sat->vel);
 
         /* get the velocity of the satellite */
-        Predict_Math::Magnitude($sat->vel);
+        $sat->vel->w = sqrt($sat->vel->x * $sat->vel->x + $sat->vel->y * $sat->vel->y + $sat->vel->z * $sat->vel->z);
         $sat->velo = $sat->vel->w;
         Predict_SGPObs::Calculate_Obs($jul_utc, $sat->pos, $sat->vel, $obs_geodetic, $obs_set);
         Predict_SGPObs::Calculate_LatLonAlt($jul_utc, $sat->pos, $sat_geodetic);

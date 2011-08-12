@@ -41,8 +41,8 @@ class Predict_SGPObs
         $obs_vel->x = -Predict::mfactor * $obs_pos->y; /*kilometers/second*/
         $obs_vel->y =  Predict::mfactor * $obs_pos->x;
         $obs_vel->z =  0;
-        Predict_Math::Magnitude($obs_pos);
-        Predict_Math::Magnitude($obs_vel);
+        $obs_pos->w = sqrt($obs_pos->x * $obs_pos->x + $obs_pos->y * $obs_pos->y + $obs_pos->z * $obs_pos->z);
+        $obs_vel->w = sqrt($obs_vel->x * $obs_vel->x + $obs_vel->y * $obs_vel->y + $obs_vel->z * $obs_vel->z);
     }
 
     /* Procedure Calculate_LatLonAlt will calculate the geodetic  */
@@ -108,7 +108,7 @@ class Predict_SGPObs
         $rgvel->y = $vel->y - $obs_vel->y;
         $rgvel->z = $vel->z - $obs_vel->z;
 
-        Predict_Math::Magnitude($range);
+        $range->w = sqrt($range->x * $range->x + $range->y * $range->y + $range->z * $range->z);
 
         $sin_lat   = sin($geodetic->lat);
         $cos_lat   = cos($geodetic->lat);

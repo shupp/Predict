@@ -47,12 +47,6 @@ class Predict_Math
         return Predict::pio2 - self::ArcSin($arg);
     }
 
-    /* Calculates scalar magnitude of a Predict_Vector argument */
-    public static function Magnitude(Predict_Vector $v)
-    {
-        $v->w = sqrt($v->x * $v->x + $v->y * $v->y + $v->z * $v->z);
-    }
-
     /* Adds vectors v1 and v2 together to produce v3 */
     public static function Vec_Add(Predict_Vector $v1, Predict_Vector $v2, Predict_Vector $v3)
     {
@@ -60,7 +54,7 @@ class Predict_Math
         $v3->y = $v1->y + $v2->y;
         $v3->z = $v1->z + $v2->z;
 
-        self::Magnitude($v3);
+        $v3->w = sqrt($v3->x * $v3->x + $v3->y * $v3->y + $v3->z * $v3->z);
     }
 
     /* Subtracts vector v2 from v1 to produce v3 */
@@ -70,7 +64,7 @@ class Predict_Math
         $v3->y = $v1->y - $v2->y;
         $v3->z = $v1->z - $v2->z;
 
-        self::Magnitude($v3);
+        $v3->w = sqrt($v3->x * $v3->x + $v3->y * $v3->y + $v3->z * $v3->z);
     }
 
     /* Multiplies the vector v1 by the scalar k to produce the vector v2 */
@@ -89,7 +83,7 @@ class Predict_Math
         $v->y *= $k;
         $v->z *= $k;
 
-        self::Magnitude($v);
+        $v->w = sqrt($v->x * $v->x + $v->y * $v->y + $v->z * $v->z);
     }
 
     /* Returns the dot product of two vectors */
@@ -101,8 +95,8 @@ class Predict_Math
     /* Calculates the angle between vectors v1 and v2 */
     public static function Angle(Predict_Vector $v1, Predict_Vector $v2)
     {
-        self::Magnitude($v1);
-        self::Magnitude($v2);
+        $v1->w = sqrt($v1->x * $v1->x + $v1->y * $v1->y + $v1->z * $v1->z);
+        $v2->w = sqrt($v2->x * $v2->x + $v2->y * $v2->y + $v2->z * $v2->z);
         return (self::ArcCos(self::Dot($v1, $v2) / ($v1->w * $v2->w)));
     }
 
@@ -113,7 +107,7 @@ class Predict_Math
         $v3->y = $v1->z * $v2->x - $v1->x * $v2->z;
         $v3->z = $v1->x * $v2->y - $v1->y * $v2->x;
 
-        self::Magnitude($v3);
+        $v3->w = sqrt($v3->x * $v3->x + $v3->y * $v3->y + $v3->z * $v3->z);
     }
 
     /* Normalizes a vector */
