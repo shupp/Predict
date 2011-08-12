@@ -127,4 +127,4 @@ echo "DEEP_SPACE_EPHEM: " . ($sat->flags & Predict_SGPSDP::DEEP_SPACE_EPHEM_FLAG
 
 echo $tbl->getTable();
 
-var_dump((microtime(true) - $start) * 1000);
+echo "Execution time: " . number_format((microtime(true) - $start) * 1000, 2) . "ms\n";
