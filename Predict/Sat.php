@@ -143,7 +143,7 @@ class Predict_Sat
         }
 
         /* execute computations */
-        $sdpsgp = new Predict_SGPSDP();
+        $sdpsgp = Predict_SGPSDP::getInstance($sat);
         if ($sat->flags & Predict_SGPSDP::DEEP_SPACE_EPHEM_FLAG) {
             $sdpsgp->SDP4($sat, 0.0);
         } else {

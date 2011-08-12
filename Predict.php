@@ -113,7 +113,7 @@ class Predict
     const SAT_VIS_ECLIPSED = 3;
 
     /* preferences */
-    public $minEle     = 5;  // Minimum elevation
+    public $minEle     = 10;  // Minimum elevation
     public $timeRes    = 10; // Pass details: time resolution
     public $numEntries = 20; // Pass details: number of entries
     public $threshold  = -6; // Twilight threshold
@@ -507,7 +507,7 @@ class Predict
         $sat->tsince = ($sat->jul_utc - $sat->jul_epoch) * self::xmnpda;
 
         /* call the norad routines according to the deep-space flag */
-        $sgpsdp = new Predict_SGPSDP();
+        $sgpsdp = Predict_SGPSDP::getInstance($sat);
         if ($sat->flags & Predict_SGPSDP::DEEP_SPACE_EPHEM_FLAG) {
             $sgpsdp->SDP4($sat, $sat->tsince);
         } else {

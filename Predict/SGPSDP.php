@@ -1062,5 +1062,22 @@ class Predict_SGPSDP
     {
       self::$Flags &= ~$flag;
     }
+
+    /**
+     * Singleton
+     *
+     * @param Predict_Sat $sat The current satellite data instance
+     *
+     * @return Predict_SGPSDP
+     */
+    public static function getInstance(Predict_Sat $sat)
+    {
+        static $instances = array();
+        $catnr = $sat->tle->catnr;
+        if (!isset($instances[$catnr])) {
+            $instances[$catnr] = new self();
+        }
+        return $instances[$catnr];
+    }
 }
 ?>
