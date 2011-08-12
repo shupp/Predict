@@ -142,11 +142,8 @@ class Predict_SGPObs
         /* Correction is meaningless when apparent elevation is below horizon */
         //	obs_set->el = obs_set->el + Radians((1.02/tan(Radians(Degrees(el)+
         //							      10.3/(Degrees(el)+5.11))))/60);
-        if ($obs_set->el >= 0) {
-            Predict_SGPSDP::SetFlag(Predict_SGPSDP::VISIBLE_FLAG);
-        } else {
+        if ($obs_set->el < 0) {
             $obs_set->el = $el;  /*Reset to true elevation*/
-            Predict_SGPSDP::ClearFlag(Predict_SGPSDP::VISIBLE_FLAG);
         }
     }
 
