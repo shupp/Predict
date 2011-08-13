@@ -36,6 +36,7 @@
 */
 
 require_once 'Predict/Time.php';
+require_once 'Predict/Math.php';
 require_once 'Predict/Pass.php';
 require_once 'Predict/PassDetail.php';
 require_once 'Predict/Vector.php';
