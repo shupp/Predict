@@ -114,7 +114,7 @@ class Predict
     const SAT_VIS_ECLIPSED = 3;
 
     /* preferences */
-    public $minEle     = 10;  // Minimum elevation
+    public $minEle     = 10; // Minimum elevation
     public $timeRes    = 10; // Pass details: time resolution
     public $numEntries = 20; // Pass details: number of entries
     public $threshold  = -6; // Twilight threshold
