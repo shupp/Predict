@@ -768,4 +768,102 @@ class Predict
 
         return $passes;
     }
+
+    /**
+     * Filters out visible passes and adds the visible aos, tca, los, and
+     * corresponding az and ele for each.
+     *
+     * @param array $passes The passes returned from get_passes()
+     *
+     * @author Bill Shupp
+     * @return array
+     */
+    public function filterVisiblePasses(array $passes)
+    {
+        $filtered = array();
+
+        foreach ($passes as $result) {
+            // Dummy check
+            if ($result->vis[0] != 'V') {
+                continue;
+            }
+
+            $aos    = false;
+            $aos_az = false;
+            $aos    = false;
+            $tca    = false;
+            $los_az = false;
+            $max_el = 0;
+
+            foreach ($result->details as $detail) {
+                if ($detail->vis != Predict::SAT_VIS_VISIBLE) {
+                    continue;
+                }
+                if ($detail->el < $this->minEle) {
+                    continue;
+                }
+
+                if ($aos == false) {
+                    $aos       = $detail->time;
+                    $aos_az    = $detail->az;
+                    $aos_el    = $detail->el;
+                    $tca       = $detail->time;
+                    $los       = $detail->time;
+                    $los_az    = $detail->az;
+                    $los_el    = $detail->el;
+                    $max_el    = $detail->el;
+                    $max_el_az = $detail->el;
+                    continue;
+                }
+                $los    = $detail->time;
+                $los_az = $detail->az;
+                $los_el = $detail->el;
+
+                if ($detail->el > $max_el) {
+                    $tca       = $detail->time;
+                    $max_el    = $detail->el;
+                    $max_el_az = $detail->az;
+                }
+            }
+
+            if ($aos == $tca) {
+                // Not worth it, skip
+                continue;
+            }
+
+            $result->visible_aos       = $aos;
+            $result->visible_aos_az    = $aos_az;
+            $result->visible_aos_el    = $aos_el;
+            $result->visible_tca       = $tca;
+            $result->visible_max_el    = $max_el;
+            $result->visible_max_el_az = $max_el_az;
+            $result->visible_los       = $los;
+            $result->visible_los_az    = $los_az;
+            $result->visible_los_el    = $los_el;
+
+            $filtered[] = $result;
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * Translates aziumuth degrees to compass direction:
+     *
+     * N (0°), NNE (22.5°), NE (45°), ENE (67.5°), E (90°), ESE (112.5°),
+     * SE (135°), SSE (157.5°), S (180°), SSW (202.5°), SW (225°),
+     * WSW (247.5°), W (270°), WNW (292.5°), NW (315°), NNW (337.5°)
+     *
+     * @param int $az The azimuth in degrees, defaults to 0
+     *
+     * @return string
+     */
+    public function azDegreesToDirection($az = 0)
+    {
+        $i = floor($az / 22.5);
+        $m = (22.5 * (2 * $i + 1)) / 2;
+        $i = ($az >= $m) ? $i + 1 : $i;
+
+        return trim(substr('N  NNENE ENEE  ESESE SSES  SSWSW WSWW  WNWNW NNWN  ', $i * 3, 3));
+    }
 }
