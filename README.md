@@ -21,7 +21,7 @@ The latter just does predictions for benchmarking with xhprof.
 
 You can also see an image of a Predict/Google Maps API mash-up I did for fun:
 
-![Google Maps Mashup](/shupp/Predict/blob/master/examples/google_maps_iss.png
+![Google Maps Mashup](/shupp/Predict/blob/master/examples/google_maps_iss.png)
 
 # About this port
 
