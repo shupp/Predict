@@ -1,6 +1,9 @@
 <?php
+/**
+ * Run from root checkout, not in tests
+ */
 
-require_once 'Console/Table.php';
+require_once 'tests/Table.php';
 require_once 'Predict/TLE.php';
 require_once 'Predict/Sat.php';
 require_once 'Predict/SGPSDP.php';
