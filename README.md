@@ -2,11 +2,11 @@
 
 Predict is a partial PHP port of the [Gpredict](http://gpredict.oz9aec.net/) program
 that allows real-time tracking and orbit prediction of satellites from two line
-element sets.  It supports the SGP4 and SDP4 models for prediction.
+element sets.  It supports the SGP4 and SDP4 [models](http://en.wikipedia.org/wiki/Simplified_perturbations_models) for prediction.
 
 # Installation
 
-Just clone this repo and run tests/examples from the root of the checkout.
+Just clone this repo and try out the tests and examples from the root of the checkout.
 
 # Examples/Tests
 
@@ -19,9 +19,13 @@ script.  The former is for generating visible pass predictions of the ISS, and i
 similar to what you might get from the Heavens-Above website, and it is heavily commented.
 The latter just does predictions for benchmarking with xhprof.
 
-You can also see an image of a Predict/Google Maps API mash-up I did for fun:
+You can see an image of a Predict/Google Maps API mash-up I did for fun:
 
 ![Google Maps Mashup](/shupp/Predict/raw/master/examples/google_maps_iss.png)
+
+You can also see an example visible pass plotted from the polar view of the observer:
+
+![Google Maps Mashup](/shupp/Predict/raw/master/examples/pass_polar_plot.png)
 
 # About this port
 
