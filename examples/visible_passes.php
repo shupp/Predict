@@ -54,6 +54,7 @@ $format = 'm-d-Y H:i:s';         // Time format from PHP's date() function
 
 // Format the output similar to the heavens-above.com website
 foreach ($filtered as $pass) {
+    echo "AOS Daynum: " . $pass->visible_aos . "\n";
     echo "AOS Time: " . Predict_Time::daynum2readable($pass->visible_aos, $zone, $format) . "\n";
     echo "AOS Az: " . $predict->azDegreesToDirection($pass->visible_aos_az) . "\n";
     echo "AOS El: " . round($pass->visible_aos_el) . "\n";
