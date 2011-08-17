@@ -8,6 +8,9 @@ require_once 'Predict.php';
 require_once 'Predict/Math.php';
 require_once 'Predict/Time.php';
 require_once 'Predict/Vector.php';
+require_once 'Predict/Geodetic.php';
+require_once 'Predict/ObsSet.php';
+require_once 'Predict/SGPObs.php';
 
 /*
  * Unit Solar
@@ -68,5 +71,44 @@ class Predict_Solar
         } else {
             return 0;
         }
+    }
+
+    /**
+     * Finds the current location of the sun based on the observer location
+     *
+     * @param Predict_QTH $qth    The observer location
+     * @param int         $daynum The daynum or null to use the current daynum
+     *
+     * @return Predict_ObsSet
+     */
+    public static function FindSun(Predict_QTH $qth, $daynum = null)
+    {
+        if ($daynum === null) {
+            $daynum = Predict_Time::get_current_daynum();
+        }
+
+        $obs_geodetic = new Predict_Geodetic();
+        $obs_geodetic->lon   = $qth->lon * Predict::de2ra;
+        $obs_geodetic->lat   = $qth->lat * Predict::de2ra;
+        $obs_geodetic->alt   = $qth->alt / 1000.0;
+        $obs_geodetic->theta = 0;
+
+        $solar_vector = new Predict_Vector();
+        $zero_vector  = new Predict_Vector();
+        $solar_set    = new Predict_ObsSet();
+
+        self::Calculate_Solar_Position($daynum, $solar_vector);
+        Predict_SGPObs::Calculate_Obs(
+            $daynum,
+            $solar_vector,
+            $zero_vector,
+            $obs_geodetic,
+            $solar_set
+        );
+
+        $solar_set->az = Predict_Math::Degrees($solar_set->az);
+        $solar_set->el = Predict_Math::Degrees($solar_set->el);
+
+        return $solar_set;
     }
 }
