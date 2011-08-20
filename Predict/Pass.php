@@ -14,4 +14,5 @@ class Predict_Pass
     public $maxel_az; /*!< Azimuth at maximum elevation */
     public $vis;      /*!< Visibility string, e.g. VSE, -S-, V-- */
     public $details = array();  /*!< List of pass_detail_t entries */
+    public $max_apparent_magnitude = null; /* maximum apparent magnitude, experimental */
 }

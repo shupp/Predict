@@ -300,6 +300,14 @@ class Predict
                     // as gpredict does
                     $pass->details[] = $detail;
 
+                    // Look up apparent magnitude if this is a visible pass
+                    if ($detail->vis === self::SAT_VIS_VISIBLE) {
+                        $apmag = $sat->calculateApparentMagnitude($t, $qth);
+                        if ($pass->max_apparent_magnitude === null || $apmag < $pass->max_apparent_magnitude) {
+                            $pass->max_apparent_magnitude = $apmag;
+                        }
+                    }
+
                     /* store elevation if greater than the
                         previously stored one
                     */

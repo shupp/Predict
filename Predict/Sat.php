@@ -8,6 +8,8 @@ require_once 'Predict.php';
 require_once 'Predict/SGPSDP.php';
 require_once 'Predict/Vector.php';
 require_once 'Predict/SGSDPStatic.php';
+require_once 'Predict/SGPObs.php';
+require_once 'Predict/Solar.php';
 require_once 'Predict/DeepArg.php';
 require_once 'Predict/DeepStatic.php';
 require_once 'Predict/Geodetic.php';
@@ -257,5 +259,49 @@ class Predict_Sat
         } else {
               return false;
         }
+    }
+
+    /**
+     * Experimental attempt at calculating apparent magnitude.  Known intrinsic
+     * magnitudes are listed inside the function for now.
+     *
+     * @param float       $time The daynum the satellite is calculated for
+     * @param Predict_QTH $qth  The observer location
+     *
+     * @return null on failure, float otherwise
+     */
+    public function calculateApparentMagnitude($time, Predict_QTH $qth)
+    {
+        // Recorded intrinsic magnitudes
+        static $intrinsicMagnitudes = array(
+            '25544' => array(
+                'mag'      => -1.3,
+                'illum'    => .5,
+                'distance' => 1000,
+            )
+        );
+
+        // Return null if we don't have a record of the intrinsic mag
+        if (!isset($intrinsicMagnitudes[$this->tle->catnr])) {
+            return null;
+        }
+        $imag = $intrinsicMagnitudes[$this->tle->catnr];
+
+        // First calculate solar phase angle
+        $observerGeo      = new Predict_Geodetic();
+        $observerGeo->lat = Predict_Math::Radians($qth->lat);
+        $observerGeo->lon = Predict_Math::Radians($qth->lon);
+        $observerGeo->alt = $qth->alt * 1000;
+        $observerPos      = new Predict_Vector();
+        $observerVel      = new Predict_Vector();
+        $solarVector      = new Predict_Vector();
+        Predict_Solar::Calculate_Solar_Position($time, $solarVector);
+        Predict_SGPObs::Calculate_User_PosVel($time, $observerGeo, $observerPos, $observerVel);
+        $observerSatPos = new Predict_Vector();
+        Predict_Math::Vec_Sub($this->pos, $observerPos, $observerSatPos);
+        $phaseAngle = Predict_Math::Degrees(Predict_Math::Angle($solarVector, $observerSatPos));
+        $illum      = $phaseAngle / 180;
+
+        return $imag['mag'] - log(($illum / $imag['illum']) * pow(($imag['distance'] / $this->range), (1 / $imag['illum'])), 2.512);
     }
 }

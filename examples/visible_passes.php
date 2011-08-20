@@ -64,6 +64,7 @@ foreach ($filtered as $pass) {
     echo "LOS Time: " . Predict_Time::daynum2readable($pass->visible_los, $zone, $format) . "\n";
     echo "LOS Az: " . $predict->azDegreesToDirection($pass->visible_los_az) . "\n";
     echo "LOS El: " . round($pass->visible_los_el) . "\n";
+    echo "Magnitude: " . number_format($pass->max_apparent_magnitude, 1) . "\n";
     echo "\n";
 }
 
