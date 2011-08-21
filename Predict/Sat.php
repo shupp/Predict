@@ -302,6 +302,6 @@ class Predict_Sat
         $phaseAngle = Predict_Math::Degrees(Predict_Math::Angle($solarVector, $observerSatPos));
         $illum      = $phaseAngle / 180;
 
-        return $imag['mag'] - log(($illum / $imag['illum']) * pow(($imag['distance'] / $this->range), (1 / $imag['illum'])), 2.512);
+        return $imag['mag'] - log(($illum / $imag['illum']) * pow(($imag['distance'] / $this->range), 2), 2.512);
     }
 }
