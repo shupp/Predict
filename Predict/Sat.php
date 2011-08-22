@@ -22,6 +22,9 @@ require_once 'Predict/Math.php';
  */
 class Predict_Sat
 {
+    // Fifth root of a hundred, used for magnitude calculation
+    const POGSONS_RATIO = 2.5118864315096;
+
     public $name     = null;
     public $nickname = null;
     public $website  = null;
@@ -272,7 +275,8 @@ class Predict_Sat
      */
     public function calculateApparentMagnitude($time, Predict_QTH $qth)
     {
-        // Recorded intrinsic magnitudes
+        // Recorded intrinsic magnitudes and their respective
+        // illumination and distance from heavens-above.com
         static $intrinsicMagnitudes = array(
             '25544' => array(
                 'mag'      => -1.3,
@@ -287,21 +291,33 @@ class Predict_Sat
         }
         $imag = $intrinsicMagnitudes[$this->tle->catnr];
 
-        // First calculate solar phase angle
+        // Convert the observer's geodetic info to radians and km so
+        // we can compare vectors
         $observerGeo      = new Predict_Geodetic();
         $observerGeo->lat = Predict_Math::Radians($qth->lat);
         $observerGeo->lon = Predict_Math::Radians($qth->lon);
         $observerGeo->alt = $qth->alt * 1000;
+
+        // Now determine the sun and observer positions
         $observerPos      = new Predict_Vector();
         $observerVel      = new Predict_Vector();
         $solarVector      = new Predict_Vector();
         Predict_Solar::Calculate_Solar_Position($time, $solarVector);
         Predict_SGPObs::Calculate_User_PosVel($time, $observerGeo, $observerPos, $observerVel);
+
+        // Determine the solar phase and and thus the percent illumination
         $observerSatPos = new Predict_Vector();
         Predict_Math::Vec_Sub($this->pos, $observerPos, $observerSatPos);
         $phaseAngle = Predict_Math::Degrees(Predict_Math::Angle($solarVector, $observerSatPos));
         $illum      = $phaseAngle / 180;
 
-        return $imag['mag'] - log(($illum / $imag['illum']) * pow(($imag['distance'] / $this->range), 2), 2.512);
+        $illuminationChange            = $illum / $imag['illum'];
+        $inverseSquareOfDistanceChange = pow(($imag['distance'] / $this->range), 2);
+        $changeInMagnitude             = log(
+            $illuminationChange * $inverseSquareOfDistanceChange,
+            self::POGSONS_RATIO
+        );
+
+        return $imag['mag'] - $changeInMagnitude;
     }
 }
