@@ -835,8 +835,8 @@ class Predict
                 }
             }
 
-            if ($aos == $tca) {
-                // Not worth it, skip
+            if ($aos === false) {
+                // Does not reach minimum elevation, skip
                 continue;
             }
 
