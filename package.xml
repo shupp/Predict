@@ -13,11 +13,11 @@
   <email>shupp@php.net</email>
   <active>yes</active>
  </lead>
- <date>2011-08-22</date>
- <time>09:25:03</time>
+ <date>2011-09-05</date>
+ <time>21:46:32</time>
  <version>
-  <release>0.1.0</release>
-  <api>0.1.0</api>
+  <release>0.1.1</release>
+  <api>0.1.1</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -25,7 +25,8 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL v2.1</license>
  <notes>
-* Initial release
+* Fixed minimum elevation bug in visible pass detection
+* Updated precision of Pogson&apos;s Ratio, refactored calculate magnitude to be more readble, as well as added comments
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -95,6 +96,22 @@
    <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL v2.1</license>
    <notes>
 * Initial release
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.1</release>
+    <api>0.1.1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2011-09-05</date>
+   <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL v2.1</license>
+   <notes>
+* Fixed minimum elevation bug in visible pass detection
+* Updated precision of Pogson&apos;s Ratio, refactored calculate magnitude to be more readble, as well as added comments
    </notes>
   </release>
  </changelog>
