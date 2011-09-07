@@ -193,8 +193,7 @@ class Predict_Time
     public static function daynum2readable($dn, $zone = 'America/Los_Angeles', $format = 'm-d-Y H:i:s')
     {
         $unix = self::daynum2unix($dn);
-        $date = new DateTime();
-        $date->setTimestamp($unix);
+        $date = new DateTime("@" . round($unix));
         $dateTimezone = new DateTimezone($zone);
         $date->setTimezone($dateTimezone);
         return $date->format($format);

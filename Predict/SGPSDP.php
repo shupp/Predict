@@ -737,7 +737,7 @@ class Predict_SGPSDP
                         $sat->deep_arg->eosq + 3651.957 * $eoc;
                     $g422 = -3581.69 + 16178.11 * $eq - 24462.77 *
                         $sat->deep_arg->eosq+ 12422.52 * $eoc;
-                    if (eq <= 0.715) {
+                    if ($eq <= 0.715) {
                         $g520 = 1464.74 - 4664.75 * $eq + 3763.64 * $sat->deep_arg->eosq;
                     } else {
                         $g520 = -5149.66 + 29936.92 * $eq - 54087.36 *
@@ -922,7 +922,7 @@ class Predict_SGPSDP
                             + $sat->dps->d5232 * sin(-$xomi + $sat->dps->xli- Predict::g52)
                             + $sat->dps->d5421 * sin($xomi + $x2li - Predict::g54)
                             + $sat->dps->d5433 * sin(-$xomi + $x2li - Predict::g54);
-                        $xnddt = $sat->dps->d2201 * cos(x2omi + $sat->dps->xli- Predict::g22)
+                        $xnddt = $sat->dps->d2201 * cos($x2omi + $sat->dps->xli- Predict::g22)
                             + $sat->dps->d2211 * cos($sat->dps->xli - Predict::g22)
                             + $sat->dps->d3210 * cos($xomi + $sat->dps->xli - Predict::g32)
                             + $sat->dps->d3222 * cos(-$xomi + $sat->dps->xli - Predict::g32)

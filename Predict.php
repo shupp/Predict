@@ -169,15 +169,12 @@ class Predict
         $dt = 0.0;     /* time diff */
         $step = 0.0;   /* time step */
         $t0 = $start;
-        $t;            /* current time counter */
         $tres = 0.0;   /* required time resolution */
         $max_el = 0.0; /* maximum elevation */
         $pass = null;
         $detail = null;
         $done = false;
         $iter = 0;      /* number of iterations */
-        $sat;
-        $sat_working;
         /* FIXME: watchdog */
 
         /*copy sat_in to a working structure*/
