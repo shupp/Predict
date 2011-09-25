@@ -198,4 +198,26 @@ class Predict_Time
         $date->setTimezone($dateTimezone);
         return $date->format($format);
     }
+
+    /**
+     * Returns the unix timestamp of a TLE's epoch
+     *
+     * @param Predict_TLE $tle The TLE object
+     *
+     * @return int
+     */
+    public static function getEpochTimeStamp(Predict_TLE $tle)
+    {
+        $year = $tle->epoch_year;
+        $day  = $tle->epoch_day;
+        $sec  = round(86400 * $tle->epoch_fod);
+
+        $zone = new DateTimeZone('GMT');
+        $date = new DateTime();
+        $date->setTimezone($zone);
+        $date->setDate($year, 1, 1);
+        $date->setTime(0, 0, 0);
+
+        return $date->format('U') + (86400 * $day) + $sec;
+    }
 }
