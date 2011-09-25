@@ -13,11 +13,11 @@
   <email>shupp@php.net</email>
   <active>yes</active>
  </lead>
- <date>2011-09-05</date>
- <time>21:46:32</time>
+ <date>2011-09-25</date>
+ <time>08:02:02</time>
  <version>
-  <release>0.1.1</release>
-  <api>0.1.1</api>
+  <release>0.1.2</release>
+  <api>0.1.2</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -25,8 +25,7 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL v2.1</license>
  <notes>
-* Fixed minimum elevation bug in visible pass detection
-* Updated precision of Pogson&apos;s Ratio, refactored calculate magnitude to be more readble, as well as added comments
+* Added Predict_Time::getEpochTimeStamp()
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -112,6 +111,21 @@
    <notes>
 * Fixed minimum elevation bug in visible pass detection
 * Updated precision of Pogson&apos;s Ratio, refactored calculate magnitude to be more readble, as well as added comments
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.2</release>
+    <api>0.1.2</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2011-09-25</date>
+   <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL v2.1</license>
+   <notes>
+* Added Predict_Time::getEpochTimeStamp()
    </notes>
   </release>
  </changelog>

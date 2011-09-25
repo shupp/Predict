@@ -30,16 +30,15 @@ $packagexml->setDescription(
 );
 
 $packagexml->setChannel('shupp.github.com/pirum');
-$packagexml->setAPIVersion('0.1.1');
-$packagexml->setReleaseVersion('0.1.1');
+$packagexml->setAPIVersion('0.1.2');
+$packagexml->setReleaseVersion('0.1.2');
 
 $packagexml->setReleaseStability('alpha');
 
 $packagexml->setAPIStability('alpha');
 
 $packagexml->setNotes('
-* Fixed minimum elevation bug in visible pass detection
-* Updated precision of Pogson\'s Ratio, refactored calculate magnitude to be more readble, as well as added comments
+* Added Predict_Time::getEpochTimeStamp()
 ');
 $packagexml->setPackageType('php');
 $packagexml->addRelease();
