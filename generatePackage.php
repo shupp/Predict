@@ -30,15 +30,16 @@ $packagexml->setDescription(
 );
 
 $packagexml->setChannel('shupp.github.com/pirum');
-$packagexml->setAPIVersion('0.1.2');
-$packagexml->setReleaseVersion('0.1.2');
+$packagexml->setAPIVersion('0.2.0');
+$packagexml->setReleaseVersion('0.2.0');
 
 $packagexml->setReleaseStability('alpha');
 
 $packagexml->setAPIStability('alpha');
 
 $packagexml->setNotes('
-* Added Predict_Time::getEpochTimeStamp()
+* Fixed bug in Predict_Time::unix2daynum()
+* Updated example iss.tle file
 ');
 $packagexml->setPackageType('php');
 $packagexml->addRelease();
