@@ -148,7 +148,7 @@ class Predict_Time
      */
     public static function unix2daynum($sec, $usec = 0)
     {
-        $time = ((($sec + 0.0000001 * $usec) / 86400.0) - 3651.0);
+        $time = ((($sec + $usec) / 86400.0) - 3651.0);
         return $time + 2444238.5;
     }
 
