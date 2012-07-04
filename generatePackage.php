@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL & ~E_DEPRECATED);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 
 require_once('PEAR/PackageFileManager2.php');
 
@@ -16,9 +16,9 @@ $packagexml->setOptions(array(
     'ignore'            => array('generatePackage.php', 'xhprof_lib/*'),
     'dir_roles' => array(
         'tests'     => 'test',
-        'examples'  => 'doc',
-        'README.md' => 'doc'
+        'examples'  => 'doc'
     ),
+    'exceptions' => array('README.md' => 'doc'),
 ));
 
 $packagexml->setPackage('Predict');
@@ -30,16 +30,15 @@ $packagexml->setDescription(
 );
 
 $packagexml->setChannel('shupp.github.com/pirum');
-$packagexml->setAPIVersion('0.2.0');
-$packagexml->setReleaseVersion('0.2.0');
+$packagexml->setAPIVersion('0.2.1');
+$packagexml->setReleaseVersion('0.2.1');
 
 $packagexml->setReleaseStability('alpha');
 
 $packagexml->setAPIStability('alpha');
 
 $packagexml->setNotes('
-* Fixed bug in Predict_Time::unix2daynum()
-* Updated example iss.tle file
+* Corrected role of README.md
 ');
 $packagexml->setPackageType('php');
 $packagexml->addRelease();
