@@ -69,8 +69,13 @@ class Predict_TLE
            YYDDD.FFFFFFFF
         */
 
-        /* Epoch year; we assume > 2000 ... */
-        $this->epoch_year = 2000 + (int) substr($line1, 18, 2);
+        // Adjust for 2 digit year through 2056
+        $this->epoch_year = (int) substr($line1, 18, 2);
+        if ($this->epoch_year > 56) {
+            $this->epoch_year = $this->epoch_year + 1900;
+        } else {
+            $this->epoch_year = $this->epoch_year + 2000;
+        }
 
         /* Epoch day */
         $this->epoch_day = (int) substr($line1, 20, 3);
