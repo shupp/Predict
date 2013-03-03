@@ -218,6 +218,6 @@ class Predict_Time
         $date->setDate($year, 1, 1);
         $date->setTime(0, 0, 0);
 
-        return $date->format('U') + (86400 * $day) + $sec;
+        return $date->format('U') + (86400 * $day) + $sec - 86400;
     }
 }
