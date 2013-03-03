@@ -13,6 +13,8 @@ require_once 'Predict/Exception.php';
 class Predict_TLE
 {
     public $header;     /* Header line of TLE file */
+    public $line1;      /* Line 1 of TLE */
+    public $line2;      /* Line 2 of TLE */
     public $epoch;      /*!< Epoch Time in NORAD TLE format YYDDD.FFFFFFFF */
     public $epoch_year; /*!< Epoch: year */
     public $epoch_day;  /*!< Epoch: day of year */
@@ -52,6 +54,8 @@ class Predict_TLE
         }
 
         $this->header = $header;
+        $this->line1  = $line1;
+        $this->line2  = $line2;
 
         /** Decode Card 1 **/
         /* Satellite's catalogue number */
