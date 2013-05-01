@@ -21,11 +21,11 @@ The latter just does predictions for benchmarking with xhprof.
 
 You can see an image of a Predict/Google Maps API mash-up I did for fun:
 
-![Google Maps Mashup](/shupp/Predict/raw/master/examples/google_maps_iss.png)
+![Google Maps Mashup](https://raw.github.com/shupp/Predict/master/examples/google_maps_iss.png)
 
 You can also see an example visible pass plotted from the polar view of the observer:
 
-![Google Maps Mashup](/shupp/Predict/raw/master/examples/pass_polar_plot.png)
+![Google Maps Mashup](https://raw.github.com/shupp/Predict/master/examples/pass_polar_plot.png)
 
 # About this port
 
