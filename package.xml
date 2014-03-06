@@ -13,11 +13,11 @@
   <email>shupp@php.net</email>
   <active>yes</active>
  </lead>
- <date>2012-07-04</date>
- <time>12:51:20</time>
+ <date>2014-03-06</date>
+ <time>13:28:41</time>
  <version>
-  <release>0.2.1</release>
-  <api>0.2.1</api>
+  <release>0.2.2</release>
+  <api>0.2.2</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -25,15 +25,18 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL v2.1</license>
  <notes>
-* Corrected role of README.md
+* Addec Predict_TLE::createChecksum()
+* Updates to examples
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <dir name="examples">
     <file name="benchmark.php" role="doc" />
+    <file name="findsun.php" role="doc" />
     <file name="google_maps_iss.png" role="doc" />
     <file name="iss.tle" role="doc" />
     <file name="pass_polar_plot.png" role="doc" />
+    <file name="solar_position.php" role="doc" />
     <file name="update_iss_tle.php" role="doc" />
     <file name="visible_passes.php" role="doc" />
    </dir> <!-- /examples -->
@@ -157,6 +160,22 @@
    <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL v2.1</license>
    <notes>
 * Corrected role of README.md
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.2</release>
+    <api>0.2.2</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2014-03-06</date>
+   <license uri="http://www.opensource.org/licenses/gpl-license.php">GPL v2.1</license>
+   <notes>
+* Addec Predict_TLE::createChecksum()
+* Updates to examples
    </notes>
   </release>
  </changelog>

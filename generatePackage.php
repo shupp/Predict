@@ -30,15 +30,16 @@ $packagexml->setDescription(
 );
 
 $packagexml->setChannel('shupp.github.com/pirum');
-$packagexml->setAPIVersion('0.2.1');
-$packagexml->setReleaseVersion('0.2.1');
+$packagexml->setAPIVersion('0.2.2');
+$packagexml->setReleaseVersion('0.2.2');
 
 $packagexml->setReleaseStability('alpha');
 
 $packagexml->setAPIStability('alpha');
 
 $packagexml->setNotes('
-* Corrected role of README.md
+* Addec Predict_TLE::createChecksum()
+* Updates to examples
 ');
 $packagexml->setPackageType('php');
 $packagexml->addRelease();
