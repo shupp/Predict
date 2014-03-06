@@ -8,6 +8,8 @@
  * will not work.
  */
 
+date_default_timezone_set('America/Los_Angeles');
+
 require_once 'Predict.php';
 require_once 'Predict/Sat.php';
 require_once 'Predict/QTH.php';
