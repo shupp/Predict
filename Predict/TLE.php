@@ -194,4 +194,38 @@ class Predict_TLE
 
         return true;
     }
+
+    /**
+     * A function to allow checksum creation of a line.  This is driven by
+     * the fact that some TLEs from SpaceTrack are missing checksum numbers.
+     * You can use this to create a checksum for a line, but you should
+     * probably have confidence that the TLE data itself is good.  YMMV.
+     *
+     * @throws Predict_Exception if the line is not exactly 68 chars
+     * @return string
+     */
+    public function createChecksum($line)
+    {
+        if (strlen($line) != 68) {
+            throw Predict_Exception('Invalid line, needs to e 68 chars');
+        }
+
+        $checksum = 0;
+
+        for ($i = 0; $i < 68; $i++) {
+            if (($line[$i] >= '0') && ($line[$i] <= '9')) {
+                $value = (int) $line[$i];
+            } else if ($line[$i] == '-' ) {
+                $value = 1;
+            } else {
+                $value = 0;
+            }
+
+            $checksum += $value;
+        }
+
+        $checksum %= 10;
+
+        return $checksum;
+    }
 }
