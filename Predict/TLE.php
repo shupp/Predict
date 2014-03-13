@@ -204,7 +204,7 @@ class Predict_TLE
      * @throws Predict_Exception if the line is not exactly 68 chars
      * @return string
      */
-    public function createChecksum($line)
+    static public function createChecksum($line)
     {
         if (strlen($line) != 68) {
             throw Predict_Exception('Invalid line, needs to e 68 chars');
