@@ -65,7 +65,8 @@ class Predict_TLE
         $this->idesg = substr($line1, 9, 8);
 
         /* Epoch time; this is the complete, unconverted epoch. */
-        $this->epoch = (float) substr($line1, 18, 14);
+        /* Replace spaces with 0 before casting, as leading spaces are allowed */
+        $this->epoch = (float) str_replace(' ', '0', substr($line1, 18, 14));
 
         /* Now, convert the epoch time into year, day
            and fraction of day, according to:
