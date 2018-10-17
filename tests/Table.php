@@ -696,7 +696,7 @@ class Console_Table
      *
      * @return void
      */
-    function _updateRowsCols($rowdata = null)
+    function _updateRowsCols($rowdata = array())
     {
         // Update maximum columns.
         $this->_max_cols = max($this->_max_cols, count($rowdata));
