@@ -50,7 +50,8 @@ $qth->alt = 0;
 $tleFile = file('examples/iss.tle');
 $tle     = new Predict_TLE($tleFile[0], $tleFile[1], $tleFile[2]);
 $sat     = new Predict_Sat($tle);
-$now     = Predict_Time::get_current_daynum();
+$now     = 2459620.2339725;
+// $now     = Predict_Time::get_current_daynum();
 
 $results = $predict->get_passes($sat, $qth, $now, 10);
 

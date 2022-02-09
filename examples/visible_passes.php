@@ -38,7 +38,8 @@ $qth->lon = -122.4070; // Longitude East
 $tleFile = file('examples/iss.tle'); // Load up the ISS data file from NORAD
 $tle     = new Predict_TLE($tleFile[0], $tleFile[1], $tleFile[2]); // Instantiate it
 $sat     = new Predict_Sat($tle); // Load up the satellite data
-$now     = Predict_Time::get_current_daynum(); // get the current time as Julian Date (daynum)
+$now     = 2459620.2339725;
+// $now     = Predict_Time::get_current_daynum(); // get the current time as Julian Date (daynum)
 
 // You can modify some preferences in Predict(), the defaults are below
 //
