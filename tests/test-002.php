@@ -1,6 +1,16 @@
 <?php
 /**
- * Run from root checkout, not in tests
+ * SDP4 (deep-space) state-vector test.
+ *
+ * Propagates the test-002 TLE at five step times and compares the resulting
+ * position (km) and velocity (km/s) components against the committed reference
+ * vectors.  The table's "ok" column shows whether each component matches within
+ * tolerance; the script exits non-zero if any component is out of tolerance.
+ *
+ * Tolerance: abs(diff) <= max(1e-3, 1e-4 * abs(expected))  (a small absolute
+ * floor plus a 0.01% relative band), matching test-001.
+ *
+ * Run from root checkout, not in tests.
  */
 
 require_once 'tests/Table.php';
@@ -8,6 +18,33 @@ require_once 'Predict/TLE.php';
 require_once 'Predict/Sat.php';
 require_once 'Predict/SGPSDP.php';
 require_once 'Predict/Math.php';
+
+/**
+ * @param float $actual
+ * @param float $expected
+ * @return bool
+ */
+function within_tol($actual, $expected)
+{
+    $tol = max(1e-3, 1e-4 * abs($expected));
+    return abs($actual - $expected) <= $tol;
+}
+
+/**
+ * Percentage divergence of actual from expected.  Returns 'n/a' when a
+ * percentage is not meaningful (expected is exactly zero).
+ *
+ * @param float $actual
+ * @param float $expected
+ * @return string
+ */
+function pct_div($actual, $expected)
+{
+    if ($expected == 0.0) {
+        return 'n/a';
+    }
+    return number_format(100.0 * abs($actual - $expected) / abs($expected), 5) . '%';
+}
 
 $start = microtime(true);
 
@@ -64,72 +101,58 @@ $headers = array(
     'label',
     'result',
     'expected',
+    'div %',
+    'ok',
 );
 
-$data = array();
-
+$data     = array();
+$failures = 0;
 
 $file = file('tests/test-002.tle');
 $tle  = new Predict_TLE($file[0], $file[1], $file[2]);
 $sat  = new Predict_Sat($tle);
 $sgpsdp  = new Predict_SGPSDP();
 
-$count = 0;
 foreach ($expected as $e) {
-    $sgpsdp->SGP4($sat, $e['step']);
+    // Deep-space object (period > 225 min): gpredict's select_ephemeris() routes
+    // this to SDP4().  The PHP port has no auto-dispatch, so call SDP4() directly
+    // -- calling the near-Earth SGP4() here produces wrong state vectors.
+    $sgpsdp->SDP4($sat, $e['step']);
     Predict_Math::Convert_Sat_State($sat->pos, $sat->vel);
 
-    $count++;
-    $data[$count]   = array();
-    $data[$count][0] = $e['step'];
-    $data[$count][1] = 'X';
-    $data[$count][2] = $sat->pos->x;
-    $data[$count][3] = $e['x'];
+    $components = array(
+        array('X',  $sat->pos->x, $e['x']),
+        array('Y',  $sat->pos->y, $e['y']),
+        array('Z',  $sat->pos->z, $e['z']),
+        array('VX', $sat->vel->x, $e['vx']),
+        array('VY', $sat->vel->y, $e['vy']),
+        array('VZ', $sat->vel->z, $e['vz']),
+    );
 
-    $count++;
-    $data[$count]   = array();
-    $data[$count][0] = '';
-    $data[$count][1] = 'Y';
-    $data[$count][2] = $sat->pos->y;
-    $data[$count][3] = $e['y'];
-
-    $count++;
-    $data[$count]   = array();
-    $data[$count][0] = '';
-    $data[$count][1] = 'Z';
-    $data[$count][2] = $sat->pos->z;
-    $data[$count][3] = $e['z'];
-
-    $count++;
-    $data[$count]   = array();
-    $data[$count][0] = '';
-    $data[$count][1] = 'VX';
-    $data[$count][2] = $sat->vel->x;
-    $data[$count][3] = $e['vx'];
-
-    $count++;
-    $data[$count]   = array();
-    $data[$count][0] = '';
-    $data[$count][1] = 'VY';
-    $data[$count][2] = $sat->vel->y;
-    $data[$count][3] = $e['vy'];
-
-    $count++;
-    $data[$count]   = array();
-    $data[$count][0] = '';
-    $data[$count][1] = 'VZ';
-    $data[$count][2] = $sat->vel->z;
-    $data[$count][3] = $e['vz'];
+    foreach ($components as $i => $c) {
+        $ok = within_tol($c[1], $c[2]);
+        if (!$ok) {
+            $failures++;
+        }
+        $data[] = array(
+            $i === 0 ? $e['step'] : '',
+            $c[0],
+            $c[1],
+            $c[2],
+            pct_div($c[1], $c[2]),
+            $ok ? 'ok' : 'FAIL',
+        );
+    }
 }
-// exit;
 
 $tbl = new Console_Table();
 $tbl->setHeaders($headers);
 $tbl->addData($data);
-
 
 echo "DEEP_SPACE_EPHEM: " . ($sat->flags & Predict_SGPSDP::DEEP_SPACE_EPHEM_FLAG) . " (expected: 64)\n\n";
 
 echo $tbl->getTable();
 
 echo "Execution time: " . number_format((microtime(true) - $start) * 1000, 2) . "ms\n";
+echo ($failures ? "FAIL: $failures check(s) failed" : "PASS") . "\n";
+exit($failures ? 1 : 0);
