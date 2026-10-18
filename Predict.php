@@ -818,7 +818,7 @@ class Predict
                     $los_az    = $detail->az;
                     $los_el    = $detail->el;
                     $max_el    = $detail->el;
-                    $max_el_az = $detail->el;
+                    $max_el_az = $detail->az;
                     continue;
                 }
                 $los    = $detail->time;
