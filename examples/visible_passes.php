@@ -33,7 +33,7 @@ $qth->lon = -122.4070; // Longitude East
 // $qth->lon = 11.5809; // Lon East
 
 // The iss.tle file is the first 3 lines of
-// http://celestrak.com/NORAD/elements/stations.txt
+// http://celestrak.com/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE
 // Make sure you update this content, it goes out of date within a day or two
 $tleFile = file('examples/iss.tle'); // Load up the ISS data file from NORAD
 $tle     = new Predict_TLE($tleFile[0], $tleFile[1], $tleFile[2]); // Instantiate it

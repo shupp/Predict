@@ -5,7 +5,7 @@ $tempFilename = __DIR__ . '/new_iss.tle';
 
 error_reporting(E_ALL);
 
-$url = 'http://celestrak.com/NORAD/elements/stations.txt';
+$url = 'http://celestrak.com/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE';
 $contentsOriginal = file_get_contents($url) or die('Could not updated tle get file');
 file_put_contents($tempFilename, $contentsOriginal);
 $contents = file($tempFilename);
